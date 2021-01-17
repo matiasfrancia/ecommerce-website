@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+{% for product in object_list%}
+    
+    {% if product.active %}
+        <div>
+            <p><a href = '{{ product.get_absolute_url }}'>{{ product.title }}</a></p>
+            <p>{{ product.image.url }}</p>
+            <p>{{ product.price }}</p>
+        </div>
+
+    {% endif %}
+
+{% endfor %}
+
+{% endblock %}
