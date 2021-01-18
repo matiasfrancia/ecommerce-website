@@ -2,17 +2,23 @@
 
 {% block content %}
 
+{% include 'landingPage.html' %}
+
+<section id="gallery">
+<div class="products">
 {% for product in object_list%}
     
     {% if product.active %}
-        <div>
+        <div class="product">
+            <!-- <p>{{ product.price }}</p> -->
+            <img src="{{product.image.url}}" alt="Sin foto">
             <p><a href = '{{ product.get_absolute_url }}'>{{ product.title }}</a></p>
-            <p>{{ product.image.url }}</p>
-            <p>{{ product.price }}</p>
         </div>
-
     {% endif %}
-
 {% endfor %}
+</div>
+<input type="button" value="Load more">
+</section>
 
+{% include 'contact.html' %}
 {% endblock %}

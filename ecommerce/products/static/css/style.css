@@ -126,6 +126,7 @@ form input[type=button]{
     align-items: center;
     position: relative;
     border-radius: 1em;
+    overflow: hidden;
 }
 
 
@@ -139,7 +140,7 @@ form input[type=button]{
 }
 
 .product img{
-    width: 60%;
+    width: 20vw;
 }
 
 #gallery input[type=button]{
