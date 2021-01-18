@@ -1,0 +1,18 @@
+input{
+    background: none;
+    border: none;
+    outline: none;
+}
+
+input[type=text]{
+    border-bottom: 1px solid black;
+    border-radius: 0;
+}
+
+input[type=submit], input[type=file]{
+    border-radius: 1em;
+    background-color: lightgreen;
+    padding: .5em 1em;
+    cursor: pointer;
+    box-sizing: border-box;
+}

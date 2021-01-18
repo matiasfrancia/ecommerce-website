@@ -11,3 +11,7 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("products:product-detail", kwargs={"id": self.id})
+
+    def delete(self, *args, **kwargs):
+        self.image.delete()
+        super().delete(*args,**kwargs)
