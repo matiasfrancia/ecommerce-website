@@ -11,4 +11,5 @@ class ProductModelForm(forms.ModelForm):
             'image',
             'price',
             'active',
+            'category',
             ]
