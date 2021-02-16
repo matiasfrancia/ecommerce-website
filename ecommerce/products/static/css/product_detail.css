@@ -1,0 +1,122 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Merriweather', serif;
+    box-sizing: border-box;
+}
+
+.subtitle {
+    font-style: italic;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+p {
+    font-family: Arial;
+}
+
+/* Detalle producto */
+
+.product-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+}
+
+.product-wrapper {
+    width: 100%;
+    background: white;
+    margin-top: 2.5em;
+}
+
+.product-gallery img {
+    display: block; 
+    width: 100%;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-info h2 {
+    margin: 1rem 0 0.5rem 0;
+    text-align: center;
+}
+
+.product-info p {
+    padding: 1rem 2rem 0 2rem;
+}
+
+.btn:hover {
+    background: white;
+    color: black;
+}
+
+.cat_name {
+    padding-right: 5px;
+    font-weight: 600;
+    font-family: arial;
+}
+
+.purchase-info{
+    display: flex;
+    margin: 1.5rem 2rem 0;
+}
+
+.purchase-info input,
+.purchase-info .btn{
+    border: 1.5px solid #ddd;
+    border-radius: 25px;
+    text-align: center;
+    padding: 0.45rem 0.8rem;
+    outline: 0;
+    margin-right: 0.2rem;
+    margin-bottom: 1rem;
+}
+
+.purchase-info input{
+    width: 60px;
+}
+
+.purchase-info .btn{
+    cursor: pointer;
+    color: #fff;
+    background: #f64749;
+}
+
+.purchase-info .btn:hover{
+    opacity: 0.9;
+}
+
+@media (min-width: 850px) {
+
+    .product-container {
+        width: 80%;
+        margin: auto;
+    }
+
+    .product-wrapper {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .product-gallery {
+        width: 45%;
+    }
+
+    .product-info {
+        width: 50%;
+    }
+
+    .product-info h2 {
+        text-align: left;
+        margin: 0 2rem 0.5rem 2rem;
+    }
+
+    .product-info p {
+        margin: 0;
+    }
+}

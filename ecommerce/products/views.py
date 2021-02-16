@@ -9,10 +9,38 @@ from django.views.generic import (
     View,
 )
 
-from .models import Product
+from .models import Product, Category
 from .forms import ProductModelForm
 
 # Create your views here.
+
+# Falta validar el formulario
+
+def product_categories(request, id):
+
+    product = Product.objects.get(id=id)
+
+    if request.method == 'POST':
+
+        newCateg = request.POST.get('newCateg')
+        delCateg = request.POST.get('delCateg')
+        newName = request.POST.get('newName')
+        newValue = request.POST.get('newValue')
+
+        if newCateg and newName and newValue:
+            product.category_set.create(name = newName, value = newValue)
+
+        if delCateg:
+            for elem in request.POST:
+                if 'category' in elem:
+                    id_del = int(elem.replace('category', ''))
+                    categ_del = product.category_set.get(id=id_del)
+                    categ_del.delete()
+
+        if request.POST.get('save'):
+            return redirect("/products/%i" %id)
+                    
+    return render(request, "product_categories.html", {"p": product})
 
 class ProductCreateView(CreateView):
     template_name = "product_create.html"
@@ -21,6 +49,9 @@ class ProductCreateView(CreateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('products:product-categories', kwargs={'id': self.object.pk})
 
 class ProductListView(ListView):
     template_name = "product_list.html"
@@ -46,6 +77,9 @@ class ProductUpdateView(UpdateView):
     def form_valid(self, form):
         print(form.cleaned_data)
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('products:product-categories', kwargs={'id': self.object.pk})
 
 class ProductDeleteView(DeleteView):
     template_name = "product_delete.html"

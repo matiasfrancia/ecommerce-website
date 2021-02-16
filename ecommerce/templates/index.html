@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+{% endblock %}
+
+{% block content %}
+
+    {% include 'landingPage.html' %}
+
+    {% include 'contact.html' %}
+
+{% endblock %}

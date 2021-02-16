@@ -1,6 +1,22 @@
-*{
-    margin:0;
-    padding:0;
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* ========================================================= General ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Merriweather', serif;
+    box-sizing: border-box;
+}
+
+.subtitle {
+    font-style: italic;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+p {
+    font-family: Arial;
 }
 
 body{
@@ -19,31 +35,150 @@ section{
     width: 100%;
 }
 
-/* NavBar */
+/* ========================================================= Navbar ========================================================= */
 
-nav{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1em;
-    box-sizing: border-box;
-    border-bottom: 1px solid #ccc;
-}
-
-nav > div > a{
-    margin: 1em;
-}
-
-nav > button{
-    background: lightgreen;
-    border: none;
-    padding: 1em;
-    box-sizing: border-box;
-    border-radius: 50%;
+.logo {
     color: white;
+    letter-spacing: 2.5px;
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* Landing Page */
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 8vh;
+    background: black;
+}
+
+.nav-links {
+    display: flex;
+    width: 40%;
+    justify-content: space-around;
+}
+
+.nav-links li {
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+}
+
+.burger {
+    display: none;
+}
+
+.burger div {
+    width: 25px;
+    height: 2px;
+    background-color: white;
+    margin: 5px;
+    transition: transform 0.3s ease, rotate 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+
+    .nav-links {
+        width: 60%;
+    }
+}
+
+@media (max-width: 850px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .nav-links {
+        position: absolute;
+        height: 92vh;
+        right: 0px;
+        top: 8vh;
+        background: black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+        transform: translateX(100%);
+        transition: transform 0.5s ease-in;
+    }
+
+    .nav-links li {
+        opacity: 0;
+    }
+
+    .burger {
+        display: block;
+        cursor: pointer;
+    }
+}
+
+.nav-active {
+    transform: translateX(0%);
+}
+
+.toggle .line1 {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.toggle .line2 {
+    opacity: 0;
+}
+
+.toggle .line3 {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+@-webkit-keyframes navLinkFade {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+@-moz-keyframes navLinkFade {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+@-ms-keyframes navLinkFade {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+@keyframes navLinkFade {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+/* ========================================================= LandingPage ========================================================= */
 
 #landing-page{
     display: grid;
@@ -68,7 +203,7 @@ nav > button{
     box-sizing: border-box;
 }
 
-/* Contact */
+/* ========================================================= Contact ========================================================= */
 
 #contact{
     display: flex;
@@ -85,9 +220,6 @@ nav > button{
 
 #contact form input[type=text]{
     font-size: 1.5em;
-    border: none;
-    border-bottom: 1px solid black;
-    border-radius: 0;
     margin-top: 1.5em;
     width: 100%;
 }
@@ -95,15 +227,10 @@ nav > button{
 #contact form input[type=button]{
     margin-top: 1em;
     width: fit-content;
-    border: none;
-    background: lightgreen;
-    border-radius: 1em;
     font-size: inherit;
-    padding: .5em 1em;
-    cursor: pointer;
 }
 
-/* Gallery */
+/* ========================================================= Gallery ========================================================= */
 
 #gallery{
     padding: 1em 0;
@@ -155,7 +282,7 @@ nav > button{
     font-size: 1rem;
 }
 
-/* Shopping-cart */
+/* ========================================================= ShopingCart ========================================================= */
 
 .shopping-cart{
     display: none;

@@ -1,11 +1,42 @@
-{% extends 'base.html' %}
+{% extends 'base.html'%}
+
+{% block styles %}
+    {% load my_filters %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/product_detail.css'  %}">
+{% endblock %}
 
 {% block content %}
-    <h1>{{ object.title }}</h1>
-    <p>{{ object.description }}</p>
+    <div class="product-container">
 
-    {% if object.image %}
-        <img src = "{{ object.image.url }}" alt = "" height = "400">
-    {% endif %}
+        <div class="product-wrapper">
+            <div class="product-gallery">
+                <img src="{{ object.image.url }}" alt="imagen de {{ object.title }}">
+            </div>
 
+            <div class="product-info">
+
+                <h2>{{ object.title }}</h2>
+                <p class="subtitle">Descripción:</p>
+                <p>{{ object.description|linebreaksbr }}</p>
+                
+                {% if object.category_set.all %}
+                    <p class="subtitle">Categorias:</p>
+                {% endif %}
+                
+                {% for categ in object.category_set.all %}
+                    <p><span class="cat_name">{{categ.name}}:</span>{{categ.value}}</p>
+                {% endfor %}
+
+                <p><span>Precio:</span> ${{ object.price|to_clp }}</p>
+
+                <div class="purchase-info">
+                    <input type="number" min="0" value="1">
+                    <button type="button" class="btn">Agregar al carro</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 {% endblock %}

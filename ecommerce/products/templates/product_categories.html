@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce-website</title>
+</head>
+<body>
+
+    <h3>{{p.title}}</h3>
+
+    <form method="post" action=".">{% csrf_token %}
+
+            <ul>
+                {% for categ in p.category_set.all %}
+
+                    <li><input type="checkbox" name="category{{categ.id}}" value="clicked">{{categ.name}}: {{categ.value}}</li>
+
+                {% endfor %}
+            </ul>
+
+            <p>Name:</p>
+            <input type="text" name="newName">
+            <p>Value:</p>
+            <input type="text" name="newValue">
+            </br></br>
+            <button type="submit" name="newCateg" value="newCateg">Add Category</button>
+            <button type="submit" name="delCateg" value="delCateg">Remove Categories</button>
+            <button type="submit" name="save" value="save">Save</button>
+    </form>
+
+</body>
+</html>
