@@ -8,4 +8,12 @@
 
 {% block content%}
 
+    <form action="." method="POST">
+        {% csrf_token %}
+        <input type="text" name="subject" id="subject">
+        <input type="text" name="message" id="message">
+        <input type="email" name="email" id="email">
+        <input type="submit" value="Send">
+    </form>
+
 {% endblock %}
