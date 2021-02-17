@@ -35,6 +35,20 @@ section{
     width: 100%;
 }
 
+.btn_index {
+    padding: .5em 1em;
+    border-radius: 1em;
+    box-sizing: border-box;
+    background: black;
+    color: white;
+    cursor: pointer;
+}
+
+.btn_index:hover {
+    background: white;
+    color: black;
+}
+
 /* ========================================================= Navbar ========================================================= */
 
 .logo {
@@ -50,6 +64,10 @@ nav {
     align-items: center;
     min-height: 8vh;
     background: black;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    position: relative;
+    z-index: 1000;
 }
 
 .nav-links {
@@ -187,6 +205,9 @@ nav {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
+    position: absolute;
+    top: 0;
 }
 
 #landing-page h1{
@@ -201,10 +222,7 @@ nav {
 }
 
 #landing-page a{
-    background: black;
     padding: .5em 1em;
-    border-radius: 1em;
-    box-sizing: border-box;
 }
 
 /* ========================================================= Contact ========================================================= */

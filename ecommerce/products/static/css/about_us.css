@@ -1,0 +1,76 @@
+
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 40px;
+}
+
+.title {
+    font-weight: 600;
+    font-size:25px;
+    text-align:center;
+    margin: 40px 0 40px 0;
+}
+
+.column-wrapper {
+    width:80%;
+    display: grid;
+    grid-template: 
+    "texto1 foto1" auto
+    "foto2 texto2" auto/
+    50% 50%;
+    row-gap: 3rem;
+    column-gap: 3rem;
+}
+
+.p1, .p2 {
+    grid-area: texto;
+    width: 100%;
+    text-align: justify;
+}
+
+.p1 {
+    grid-area: texto1;
+}
+
+.p2 {
+    grid-area: texto2;
+}
+
+.subtitle-au {
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
+    padding-bottom: 1.5rem;
+}
+
+.img1, .img2 {
+    width: 100%;
+}
+
+.img1 img, .img2 img {
+    grid-area: foto1;
+    display: block;
+    width: 100%;
+}
+
+.img1 {
+    grid-area: foto1;
+}
+
+.img2 {
+    grid-area: foto2;
+}
+
+@media screen and (max-width: 720px) {
+    
+    .column-wrapper {
+        grid-template: 
+        "texto1"
+        "foto1"
+        "texto2"
+        "foto2";
+    }
+
+}

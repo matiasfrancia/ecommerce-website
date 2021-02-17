@@ -5,13 +5,17 @@
 {% block styles %}
     {% load static %}
     <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <style>
+        nav {
+            background: none;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
     <section id="landing-page">
         <h1>Lorem ipsum</h1>
         <p>Lorem ipsum dolor sit amet consectetur<br>adipisicing elit. Incidunt, perferendis deserunt<br>aperiam at inventore natus</p>
-        <a href="#" class="btn">Compra ahora</a>
+        <a href="/products/" class="btn_index">Compra ahora</a>
     </section>
-
 {% endblock %}
