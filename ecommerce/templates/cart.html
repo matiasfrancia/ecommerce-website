@@ -4,35 +4,15 @@
 
 {% block styles %}
     {% load static %}
-    <script>
-
-        function getCookie(name){
-            var cookieArr = document.cookie.split(";");
-
-            for(var i = 0; i < cookieArr.length; i++){
-                var cookiePair = cookieArr[i].split("=");
-
-                if(name == cookiePair[0].trim()){
-                    return decodeURIComponent(cookiePair[1]);
-                }
-            }
-
-            return null;
-        }
-
-        var cart = JSON.parse(getCookie('cart'));
-
-        if (cart == undefined){
-            cart = {}
-            console.log('Cart created', cart)
-            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-        }
-
-        console.log('Cart:',cart)
-
-    </script>
+    
 {% endblock %}
 
 {% block content%}
     Cart
+
+    <ul>
+    {% for item in items %}
+        <li>{{item.product.title}} - {{item.quantity}}</li>
+    {% endfor %}
+    </ul>
 {% endblock %}
