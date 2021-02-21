@@ -16,8 +16,8 @@ def contact(request):
     if request.method == "POST":
         
         if form.is_valid():
-            subject = form.cleaned_data['subject']
-            message = form.cleaned_data['message']
+            subject = form.cleaned_data['asunto']
+            message = form.cleaned_data['mensaje']
             email = form.cleaned_data['email']
             
             print(subject,message,email)

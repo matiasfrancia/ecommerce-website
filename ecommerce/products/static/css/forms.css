@@ -1,21 +1,47 @@
 
 /* Forms */
 
-input{
-    background: none;
-    border-color: gainsboro;
-    outline-color: black;
+:root {
+    --form-help-color: rgb(100, 99, 99);
+    --form-error-color: rgb(197, 0, 0);
+    --form-link-color: rgb(34, 34, 202);
 }
 
-input[type=text]{
-    border-radius: 0;
+form p {
+    font-family: merryweather, serif;
 }
 
-input[type=submit], input[type=button]{
-    color: white;
-    border-radius: 0.5em;
+input[type=text], input[type=number], input[type=email], input[type=password], button[type=submit], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    margin: 1em 0 1em 0;
+}
+
+input[type=checkbox], input[type=file] {
+    margin: 1em 0 1em 0;
+}
+
+input[type=submit], input[type=button], button[type=submit] {
     background-color: black;
-    padding: .5em 1em;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
     cursor: pointer;
-    box-sizing: border-box;
+    margin: 1em 0 1em 0;
+    width: 50%;
+}
+  
+input[type=submit]:hover, input[type=button]:hover, button[type=submit]:hover {
+    background-color: white;
+    color: black;
+}
+
+.helptext, li.errorlist {
+    font-size: 14px;
+    color: rgb(100, 99, 99);
+    display: block;
+    margin-bottom: 1em;
 }

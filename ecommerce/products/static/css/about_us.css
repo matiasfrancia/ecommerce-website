@@ -1,5 +1,4 @@
 
-
 .wrapper {
     display: flex;
     justify-content: center;
@@ -10,17 +9,17 @@
     font-weight: 600;
     font-size:25px;
     text-align:center;
-    margin: 40px 0 40px 0;
+    margin: 40px 0 2em 0;
 }
 
 .column-wrapper {
-    width:80%;
+    width:60%;
     display: grid;
     grid-template: 
     "texto1 foto1" auto
     "foto2 texto2" auto/
     50% 50%;
-    row-gap: 3rem;
+    row-gap: 5rem;
     column-gap: 3rem;
 }
 
@@ -64,6 +63,10 @@
 }
 
 @media screen and (max-width: 720px) {
+
+    .title {
+        margin: 30px 0 1em 0;
+    }
     
     .column-wrapper {
         grid-template: 
@@ -71,6 +74,8 @@
         "foto1"
         "texto2"
         "foto2";
+        row-gap: 2.5em;
+        width: 80%;
     }
 
 }

@@ -1,33 +1,42 @@
-<!doctype html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecommerce-website</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h3>{{p.title}}</h3>
+{% block title %}Contacto{% endblock %}
 
-    <form method="post" action=".">{% csrf_token %}
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/product_categories.css'  %}">
+{% endblock %}
 
-            <ul>
-                {% for categ in p.category_set.all %}
+{% block content%}
 
-                    <li><input type="checkbox" name="category{{categ.id}}" value="clicked">{{categ.name}}: {{categ.value}}</li>
+    {% if user.is_superuser %}
+        <p class="page-title">{{p.title}}</p>
 
-                {% endfor %}
-            </ul>
+        <form method="post" action=".">{% csrf_token %}
 
-            <p>Name:</p>
-            <input type="text" name="newName">
-            <p>Value:</p>
-            <input type="text" name="newValue">
-            </br></br>
-            <button type="submit" name="newCateg" value="newCateg">Add Category</button>
-            <button type="submit" name="delCateg" value="delCateg">Remove Categories</button>
-            <button type="submit" name="save" value="save">Save</button>
-    </form>
+                <ul>
+                    {% for categ in p.category_set.all %}
 
-</body>
-</html>
+                        <li><input type="checkbox" name="category{{categ.id}}" value="clicked">{{categ.name}}: {{categ.value}}</li>
+
+                    {% endfor %}
+                </ul>
+
+                <p>Name:</p>
+                <input type="text" name="newName">
+                <p>Value:</p>
+                <input type="text" name="newValue">
+                </br></br>
+                <button type="submit" name="newCateg" value="newCateg">Add Category</button>
+                <button type="submit" name="delCateg" value="delCateg">Remove Categories</button>
+                <button type="submit" name="save" value="save">Save</button>
+        </form>
+
+    {% else %}
+
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
+
+{% endblock %}

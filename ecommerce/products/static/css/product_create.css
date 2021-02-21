@@ -1,0 +1,23 @@
+
+.page-title {
+    font-weight: bold;
+    font-family: 'Merriweather', serif;
+    font-size: 25px;
+    padding: 1.5em 0 1.5em 0;
+    text-align:center;
+}
+
+form {
+    width: 60%;
+    margin: auto;
+}
+
+@media screen and (max-width: 720px) {
+    form {
+        width: 80%;
+    }
+
+    input[type=submit] {
+        width: 100%;
+    }
+}

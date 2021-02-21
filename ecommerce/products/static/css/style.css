@@ -9,6 +9,22 @@
     box-sizing: border-box;
 }
 
+.permission-denied {
+    text-align: center;
+    margin-top: 7em;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.page-title {
+    font-weight: bold;
+    font-size: 25px;
+    font-family: 'Merriweather', serif;
+    padding: 1.5em 0 1.5em 0;
+    text-align:center;
+}
+
 .subtitle {
     font-style: italic;
     font-weight: bold;
@@ -87,6 +103,21 @@ nav {
     font-family: 'Poppins', sans-serif;
 }
 
+.actions a {
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-cel, .reg-cel, .logout-cel, .profile-cel {
+    display: none;
+}
+
+.fas {
+    color: white;
+}
+
 .burger {
     display: none;
 }
@@ -104,6 +135,14 @@ nav {
     .nav-links {
         width: 60%;
     }
+
+    .login-lap, .reg-lap, .logout-lap, .profile-lap {
+        display: none;
+    }
+
+    .login-cel, .reg-cel, .logout-cel, .profile-cel {
+        display: inline;
+    }
 }
 
 @media (max-width: 850px) {
@@ -115,14 +154,14 @@ nav {
     .nav-links {
         position: absolute;
         height: 92vh;
-        right: 0px;
+        left: 0px;
         top: 8vh;
         background: black;
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 50%;
-        transform: translateX(100%);
+        transform: translateX(-100%);
         transition: transform 0.5s ease-in;
     }
 
@@ -211,13 +250,13 @@ nav {
 }
 
 #landing-page h1{
-    margin-top: 15%;
-    font-size: 4rem;
-    margin-bottom: .2em;
+    margin-top: 13%;
+    font-size: 3.1rem;
+    margin-bottom: .5em;
 }
 
 #landing-page p{
-    margin-bottom: 1em;
+    margin-bottom: 1.7em;
     text-align: center;
 }
 
@@ -254,7 +293,7 @@ nav {
 
 /* ========================================================= Gallery ========================================================= */
 
-#gallery{
+/*#gallery{
     padding: 1em 0;
 }
 
@@ -302,7 +341,7 @@ nav {
     transform: translateX(-50%);
     cursor: pointer;
     font-size: 1rem;
-}
+}*/
 
 /* ========================================================= ShopingCart ========================================================= */
 

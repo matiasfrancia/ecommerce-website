@@ -1,0 +1,46 @@
+
+.page-subtitle {
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.wrapper-button {
+    width: 60%;
+    margin:auto;
+    display:flex;
+    justify-content: center;
+}
+
+button[type=submit].login-button {
+    width: fit-content;
+    display: block;
+    margin:auto;
+}
+
+button[type=submit].create-product-button {
+    width: fit-content;
+    display: block;
+    margin:auto;
+}
+
+.product-active {
+    box-shadow: 0 0 3px 1px green;
+}
+
+.product-inactive {
+    box-shadow: 0 0 3px 1px red;
+}
+
+@media screen and (max-width: 720px) {
+
+    .wrapper-button {
+        display: unset;
+    }
+
+    button[type=submit].login-button, button[type=submit].create-product-button {
+        width: 60%;
+    }
+}

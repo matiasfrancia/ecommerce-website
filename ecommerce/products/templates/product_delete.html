@@ -1,10 +1,29 @@
 {% extends 'base.html' %}
 
+{% block title %}Eliminar producto{% endblock %}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/product_delete.css'  %}">
+{% endblock %}
+
 {% block content %}
 
-<form method="post">{% csrf_token %}
-    <p>Estás seguro de que quieres eliminar el producto: "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+    {% if user.is_superuser %}
+
+        <p class="page-title">Eliminar producto</p>
+
+        <form method="post">{% csrf_token %}
+            <p>Estás seguro de que quieres eliminar el producto: "{{ object }}"?</p>
+            <input type="submit" value="Borrar" onclick="removeCookieItem('{{object.id}}')">
+        </form>
+        
+
+    {% else %}
+
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
 
 {% endblock %}

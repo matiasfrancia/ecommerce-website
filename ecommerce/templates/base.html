@@ -13,53 +13,20 @@
         
     {% endblock %}
 
-    <script>
-
-        function getCookie(name){
-            var cookieArr = document.cookie.split(";");
-
-            for(var i = 0; i < cookieArr.length; i++){
-                var cookiePair = cookieArr[i].split("=");
-
-                if(name == cookiePair[0].trim()){
-                    return decodeURIComponent(cookiePair[1]);
-                }
-            }
-
-            return null;
-        }
-
-        var cart = JSON.parse(getCookie('cart'));
-
-        if (cart == undefined){
-            cart = {}
-            console.log('Cart created', cart)
-            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-        }
-
-        function addCookieItem(id){
-            if(cart[id] == undefined){
-                cart[id] = {'cantidad':1}
-            }else{
-                cart[id]['cantidad'] += 1
-            }
-
-            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-            location.reload();
-        }
-
-        console.log('Cart:',cart)
-
-    </script>
+    <script src="{% static 'js/cart.js' %}"></script>
 
 </head>
 <body>
 
-    {% include 'navbar.html' %}
+    {% if user.is_authenticated %}
+        {% include 'navbar_logged.html' %}
+    {% else %}
+        {% include 'navbar.html' %}
+    {% endif %}
 
     {% block content %}
 
-    {% endblock %} 
+    {% endblock %}
 
 </body>
 </html>

@@ -3,16 +3,28 @@
 {% block styles %}
     {% load static %}
     <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/product_create.css'  %}">
 {% endblock %}
 
 {% block content %}
 
-<form action='.', method='POST' enctype="multipart/form-data"> {% csrf_token %}
+    {% if user.is_superuser %}
+    
+        <p class="page-title">Create product</p>
 
-    {{ form.as_p }}
+        <form action='.', method='POST' enctype="multipart/form-data"> {% csrf_token %}
 
-    <input type = 'submit' value = 'Save' />
+            {{ form.as_p }}
 
-</form>
+            <input type = 'submit' value = 'Save' />
+
+        </form>
+        
+
+    {% else %}
+
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
 
 {% endblock %}

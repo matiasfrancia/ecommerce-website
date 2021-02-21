@@ -1,0 +1,118 @@
+
+:root {
+    --img: url()
+}
+
+nav .fas {
+    color: white;
+}
+
+.page-title {
+    font-weight: bold;
+    font-size: 25px;
+    font-family: 'Merriweather', serif;
+    padding: 1.5em 0 1.5em 0;
+    text-align:center;
+}
+
+.gallery{
+    width: 60%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+}
+
+.product {
+    padding: 12px;
+    background: white;
+    box-shadow: 0 0 3px 1px #ccc;
+    transform: scale(1);
+    transition: transform ease 0.3s;
+}
+
+.product:hover {
+    transform: scale(1.03);
+}
+  
+.product-img{
+    position: relative;
+    width: 100%;
+}
+  
+.product-img::before{
+    content: "";
+    height: 0;
+    display: inline-block;
+    padding-top: 100%;
+    width: 1px;
+    position: relative;
+}
+  
+.imagen{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: var(--img);
+    background-position: center;
+    background-size: cover;
+}
+
+.name {
+    font-weight: bold;
+    font-family: 'Merriweather', serif;
+    font-size: 18px;
+    padding: 1rem 0 8px 0;
+}
+
+.price {
+    font-size: 16px;
+    padding-bottom: 10px;
+}
+
+button[type=submit] {
+    width: calc(50% - 2px);
+}
+
+button[type=submit].background-red {
+    background: #f64749;
+    width: fit-content;
+}
+
+button[type=submit].background-red:hover {
+    background: white;
+    color: #f64749;
+}
+
+.fas {
+    color: inherit;
+}
+
+input[type=button] {
+    display: block;
+    width: 30%;
+    margin: auto;
+    margin-bottom: 3rem;
+}
+
+@media screen and (max-width:850px) {
+
+    button[type=submit].background-red {
+        width: calc(50% - 2px);
+    }
+
+}
+
+/* ========================================================= Profile ========================================================= */
+
+button[type=submit].background-red-profile {
+    background: #f64749;
+}
+
+button[type=submit].background-red-profile:hover {
+    background: white;
+    color: #f64749;
+}

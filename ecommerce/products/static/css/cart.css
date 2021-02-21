@@ -1,0 +1,133 @@
+
+:root {
+    --img: url()
+}
+
+.page-title {
+    font-weight: bold;
+    font-size: 25px;
+    font-family: 'Merriweather', serif;
+    padding: 1.5em 0 1.5em 0;
+    text-align:center;
+}
+
+.content-wrapper {
+    margin: auto;
+    width: 60%;
+    margin-bottom: 3rem;
+}
+
+.cart-total-table {
+    width: 30%;
+}
+
+.cart-table {
+    width: 100%;
+}
+
+table, td, th {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+}
+
+.table-quantity {
+    font-family: arial;
+    text-align:center;
+}
+
+.table-delete {
+    text-align: center;
+}
+
+.table-price, .table-subtotal-price, .table-total-price {
+    text-align: center;
+    font-family: arial;
+}
+
+input[type=submit] {
+    width: fit-content;
+}
+
+input[type=number] {
+    width: 100px;
+}
+
+.wrapper-total {
+    width: 70%;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 3rem;
+}
+
+button.pay {
+    width: fit-content;
+    padding-left: 3em;
+    padding-right: 3em;
+}
+
+/* ============================================================ Imagen ============================================================= */
+
+.product-img{
+    position: relative;
+    width: 100%;
+}
+  
+.product-img::before{
+    content: "";
+    height: 0;
+    display: inline-block;
+    padding-top: 100%;
+    width: 1px;
+    position: relative;
+}
+  
+.imagen{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: var(--img);
+    background-position: center;
+    background-size: cover;
+}
+
+/* ============================================================ MediaQueries ============================================================= */
+
+@media screen and (max-width: 1024px) {
+
+    .column-image, .table-image, .column-price, .table-price  {
+        display: none;
+    }
+
+    input[type=number] {
+        width: 50px;
+    }
+}
+
+@media screen and (max-width: 720px) {
+
+    .content-wrapper {
+        width: 80%;
+    }
+
+    .wrapper-total {
+        all: unset;
+        margin: auto;
+    }
+
+    .cart-total-table {
+        margin-top: 3rem;
+        width: 100%;
+    }
+
+    button.pay {
+        width: 100%;
+    }
+  
+}
