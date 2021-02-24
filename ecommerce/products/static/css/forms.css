@@ -1,21 +1,51 @@
 
 /* Forms */
 
-input{
-    background: none;
-    border-color: gainsboro;
-    outline-color: black;
+form p {
+    font-family: var(--form-p-font);
 }
 
-input[type=text]{
-    border-radius: 0;
+input[type=text], input[type=number], input[type=email], input[type=password], button[type=submit], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 4px;
+    resize: vertical;
+    margin: 1em 0 1em 0;
 }
 
-input[type=submit], input[type=button]{
-    color: white;
-    border-radius: 0.5em;
-    background-color: black;
-    padding: .5em 1em;
+input[type=checkbox], input[type=file] {
+    margin: 1em 0 1em 0;
+}
+
+input[type=submit], input[type=button], button[type=submit] {
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    padding: 10px 20px;
+    border-radius: 4px;
     cursor: pointer;
-    box-sizing: border-box;
+    margin: 1em 0 1em 0;
+    width: 50%;
+}
+  
+input[type=submit]:hover, input[type=button]:hover, button[type=submit]:hover {
+    background-color: var(--button-text-color);
+    color: var(--button-background-color);
+}
+
+.helptext, li.errorlist {
+    font-size: 14px;
+    color: var(--form-help-color);
+    display: block;
+    margin-bottom: 1em;
+}
+
+@media screen and (max-width: 850px) {
+    form {
+        width: 80%;
+    }
+
+    input[type=submit] {
+        width: 100%;
+    }
 }

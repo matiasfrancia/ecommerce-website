@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    {% load my_filters %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/products_gallery.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/profile.css'  %}">
+{% endblock %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+
+        <p class="page-title">Tu cuenta</p>
+
+        {% if user.is_superuser %}
+
+            <p class="page-subtitle">(Admin)</p>
+
+            <div class="wrapper-button">
+                <a href="/products/create/"><button type="submit" class="create-product-button">Crear nuevo producto</button></a>
+            </div>
+
+            <p class="page-title less-margin-top">Productos</p>
+
+            <div class="gallery">
+                {% for product in products %}
+                    {% if product.active %}
+
+                        <div class="product product-active">
+                            <div class="product-img">
+                                <div class="imagen" style="--img: url('{{product.image.url}}')"></div>
+                            </div>
+                            <p class="name">{{product.title}}</p>
+                            <p class="price">${{ product.price|to_clp }}</p>
+
+                            <a href="/products/{{product.id}}/update"><button type="submit">Actualizar</button></a>
+                            <a href="/products/{{product.id}}/delete"><button type="submit" class="background-red-profile">Eliminar</button></a>
+                        </div>
+
+                    {% else %}
+
+                        <div class="product product-inactive">
+                            <div class="product-img">
+                                <div class="imagen" style="--img: url('{{product.image.url}}')"></div>
+                            </div>
+                            <p class="name">{{product.title}}</p>
+                            <p class="price">${{ product.price|to_clp }}</p>
+
+                            <a href="/products/{{product.id}}/update"><button type="submit">Actualizar</button></a>
+                            <a href="/products/{{product.id}}/delete"><button type="submit" class="background-red-profile">Eliminar</button></a>
+                        </div>
+
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        {% endif %}
+    {% else %}
+        <p class="permission-denied">Debes ingresar para ver esta sección</p>
+        <div class="wrapper-button">
+            <a href="/login/"><button type="submit" class="login-button">Ingresa acá</button></a>
+        </div>
+    {% endif %}
+
+{% endblock %}

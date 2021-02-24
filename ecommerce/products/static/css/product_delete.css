@@ -1,0 +1,21 @@
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form p {
+    all:unset;
+}
+
+input[type=submit] {
+    margin-top: 3em;
+}
+
+@media screen and (max-width: 850px) {
+    input[type=submit] {
+        width: 100%;
+    }
+}

@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'ecommerce',
     'products',
+    'register',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +136,10 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = ""
 # EMAIL_HOST_PASSWORD = ""
+
+LANGUAGE_CODE = 'es'
+TIME_ZONE = 'America/Lima'
+USE_I18N = True
+
+LOGIN_REDIRECT_URL = "/profile/"
+LOGOUT_REDIRECT_URL = "/home/"

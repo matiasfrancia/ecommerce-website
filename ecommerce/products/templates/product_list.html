@@ -1,26 +1,39 @@
 {% extends 'base.html'%}
 
+{% block title %}
+    Productos
+{% endblock %}
+
 {% block styles %}
+    {% load my_filters %}
     {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/products_gallery.css'  %}">
 {% endblock %}
 
 {% block content %}
 
-    <section id="gallery">
-    
-        <div class="products">
+    <p class="page-title">Productos</p>
+
+    <div class="gallery">
+
         {% for product in object_list%}
-            
             {% if product.active %}
+
                 <div class="product">
-                    <img src="{{product.image.url}}" alt="Sin foto">
-                    <p><a href = '{{ product.get_absolute_url }}'>{{ product.title }}</a></p>
+                    <div class="product-img">
+                        <div class="imagen" style="--img: url('{{product.image.url}}')"></div>
+                    </div>
+                    <p class="name">{{product.title}}</p>
+                    <p class="price">${{ product.price|to_clp }}</p>
+
+                    <a href="{{product.get_absolute_url}}"><button type="submit">Ver más</button></a>
+                    <button type="submit" class="background-red" onclick="addCookieItem('{{product.id}}')"><i class="fas fa-shopping-cart"></i></button>
                 </div>
+
             {% endif %}
         {% endfor %}
-        </div>
 
-        <input type="button" value="Load more">
-    </section>
+    </div>
 
 {% endblock %}

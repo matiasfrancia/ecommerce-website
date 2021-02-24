@@ -1,13 +1,29 @@
 {% extends 'base.html' %}
 
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+{% endblock %}
+
 {% block content %}
 
-<form action='.', method='POST'> {% csrf_token %}
+    {% if user.is_superuser %}
 
-    {{ form.as_p }}
+        <p class="page-title">Actualizar producto</p>
 
-    <input type = 'submit' value = 'Save' />
+        <form action='.', method='POST'> {% csrf_token %}
 
-</form>
+            {{ form.as_p }}
+
+            <input type = 'submit' value = 'Guardar' />
+
+        </form>
+        
+
+    {% else %}
+
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
 
 {% endblock %}

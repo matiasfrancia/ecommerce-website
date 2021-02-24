@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views.generic import (
     CreateView, 
     DetailView,
@@ -66,7 +66,7 @@ class ProductDetailView(DetailView):
         return get_object_or_404(Product, id=idToCreate)
 
 class ProductUpdateView(UpdateView):
-    template_name = "product_create.html"
+    template_name = "product_update.html"
     form_class = ProductModelForm
     queryset = Product.objects.all()
 
@@ -89,4 +89,4 @@ class ProductDeleteView(DeleteView):
         return get_object_or_404(Product, id=idToCreate)
 
     def get_success_url(self):
-        return reverse("products:product-list")
+        return reverse("profile")

@@ -1,0 +1,105 @@
+
+nav .fas {
+    color: var(--nav-buttons-color);
+}
+
+.gallery{
+    width: 60%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+}
+
+.product {
+    padding: 12px;
+    background: var(--product-background-color);
+    box-shadow: 0 0 3px 1px var(--product-shadow-color);
+    transform: scale(1);
+    transition: transform ease 0.3s;
+}
+
+.product:hover {
+    transform: scale(1.03);
+}
+
+.product-img{
+    position: relative;
+    width: 100%;
+}
+  
+.product-img::before{
+    content: "";
+    height: 0;
+    display: inline-block;
+    padding-top: 100%;
+    width: 1px;
+    position: relative;
+}
+
+.imagen{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: var(--img);
+    background-position: center;
+    background-size: cover;
+}
+
+.name {
+    font-weight: bold;
+    font-family: var(--gallery-product-name-font);
+    font-size: 18px;
+    padding: 1rem 0 8px 0;
+}
+
+.price {
+    font-size: 16px;
+    padding-bottom: 10px;
+}
+
+button[type=submit] {
+    width: calc(50% - 2px);
+}
+
+button[type=submit].background-red {
+    background: var(--button-red-color);
+    width: fit-content;
+}
+
+button[type=submit].background-red:hover {
+    background: var(--button-red-text-color);
+    color: var(--button-red-color);
+}
+
+.fas {
+    color: inherit;
+}
+
+input[type=button] {
+    display: block;
+    width: 30%;
+    margin: auto;
+    margin-bottom: 3rem;
+}
+
+@media screen and (max-width:850px) {
+
+    button[type=submit].background-red {
+        width: calc(50% - 2px);
+    }
+}
+
+/* ========================================================= Profile ========================================================= */
+
+button[type=submit].background-red-profile {
+    background: var(--button-red-color);
+}
+
+button[type=submit].background-red-profile:hover {
+    color: var(--button-red-color);
+    background: var(--button-red-text-color);
+}

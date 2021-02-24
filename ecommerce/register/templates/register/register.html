@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register_login.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <p class="page-title">Registrarse</p>
+
+    <form method="POST">{% csrf_token %}
+
+        {{form.as_p}}
+        <input type="submit" value="Registrarse">
+        <p class="change-page">Ya tienes una cuenta? <a href="/login/">Ingresa acá</a></p>
+
+    </form>
+
+{% endblock %}

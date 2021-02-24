@@ -4,9 +4,13 @@
 
 {% block styles %}
     {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/product_create.css'  %}">
 {% endblock %}
 
 {% block content%}
+
+<p class="page-title">Contáctanos!</p>
 
     <form action="." method="POST">
         {% csrf_token %}
