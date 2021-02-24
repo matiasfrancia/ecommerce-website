@@ -26,7 +26,7 @@
                 {% endif %}
                 
                 {% for categ in object.category_set.all %}
-                    <p><span class="cat_name">{{categ.name}}:</span>{{categ.value}}</p>
+                    <p><span class="categ-name">{{categ.name}}:</span>{{categ.value}}</p>
                 {% endfor %}
 
                 <p><span>Precio:</span> ${{ object.price|to_clp }}</p>

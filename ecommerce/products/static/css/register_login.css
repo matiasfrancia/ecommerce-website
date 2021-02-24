@@ -1,7 +1,5 @@
 form {
     width: 40%;
-    margin: auto;
-    
 }
 
 form ul {
@@ -15,23 +13,29 @@ form li {
 }
 
 .change-page {
-    font-size: 20px;
     color: black;
     margin: 1em 0 3em 0;
 }
 
 .change-page a {
-    font-family: 'Merryweather', serif;
+    font-family: var(--auth-change-page-font);
     color: var(--form-link-color);
 }
 
-@media screen and (max-width: 720px) {
-    input[type=submit] {
-        width: 100%;
+@media screen and (max-width: 1000px) {
+
+    form {
+        width: 70%;
     }
+}
+
+@media screen and (max-width: 850px) {
 
     form {
         width: 80%;
     }
-
+    
+    input[type=submit] {
+        width: 100%;
+    }
 }

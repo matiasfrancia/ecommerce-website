@@ -1,20 +1,14 @@
 
 /* Forms */
 
-:root {
-    --form-help-color: rgb(100, 99, 99);
-    --form-error-color: rgb(197, 0, 0);
-    --form-link-color: rgb(34, 34, 202);
-}
-
 form p {
-    font-family: merryweather, serif;
+    font-family: var(--form-p-font);
 }
 
 input[type=text], input[type=number], input[type=email], input[type=password], button[type=submit], select, textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--input-border-color);
     border-radius: 4px;
     resize: vertical;
     margin: 1em 0 1em 0;
@@ -25,8 +19,8 @@ input[type=checkbox], input[type=file] {
 }
 
 input[type=submit], input[type=button], button[type=submit] {
-    background-color: black;
-    color: white;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
@@ -35,13 +29,23 @@ input[type=submit], input[type=button], button[type=submit] {
 }
   
 input[type=submit]:hover, input[type=button]:hover, button[type=submit]:hover {
-    background-color: white;
-    color: black;
+    background-color: var(--button-text-color);
+    color: var(--button-background-color);
 }
 
 .helptext, li.errorlist {
     font-size: 14px;
-    color: rgb(100, 99, 99);
+    color: var(--form-help-color);
     display: block;
     margin-bottom: 1em;
+}
+
+@media screen and (max-width: 850px) {
+    form {
+        width: 80%;
+    }
+
+    input[type=submit] {
+        width: 100%;
+    }
 }

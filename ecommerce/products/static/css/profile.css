@@ -1,11 +1,4 @@
 
-.page-subtitle {
-    margin-top: -2rem;
-    margin-bottom: 2rem;
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-}
 
 .wrapper-button {
     width: 60%;
@@ -32,6 +25,14 @@ button[type=submit].create-product-button {
 
 .product-inactive {
     box-shadow: 0 0 3px 1px red;
+}
+
+@media screen and (max-width: 850px) {
+    
+    .less-margin-top {
+        margin-top: -3em;
+    }
+
 }
 
 @media screen and (max-width: 720px) {

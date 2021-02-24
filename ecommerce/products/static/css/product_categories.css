@@ -3,19 +3,6 @@ button[type=submit] {
     width:fit-content;
 }
 
-.page-title {
-    font-weight: bold;
-    font-size: 25px;
-    font-family: 'Merriweather', serif;
-    padding: 1.5em 0 1.5em 0;
-    text-align:center;
-}
-
-form {
-    width: 60%;
-    margin: auto;
-}
-
 form ul {
     list-style: none;
 }

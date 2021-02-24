@@ -1,18 +1,6 @@
 
-:root {
-    --img: url()
-}
-
 nav .fas {
-    color: white;
-}
-
-.page-title {
-    font-weight: bold;
-    font-size: 25px;
-    font-family: 'Merriweather', serif;
-    padding: 1.5em 0 1.5em 0;
-    text-align:center;
+    color: var(--nav-buttons-color);
 }
 
 .gallery{
@@ -26,8 +14,8 @@ nav .fas {
 
 .product {
     padding: 12px;
-    background: white;
-    box-shadow: 0 0 3px 1px #ccc;
+    background: var(--product-background-color);
+    box-shadow: 0 0 3px 1px var(--product-shadow-color);
     transform: scale(1);
     transition: transform ease 0.3s;
 }
@@ -35,7 +23,7 @@ nav .fas {
 .product:hover {
     transform: scale(1.03);
 }
-  
+
 .product-img{
     position: relative;
     width: 100%;
@@ -49,7 +37,7 @@ nav .fas {
     width: 1px;
     position: relative;
 }
-  
+
 .imagen{
     position: absolute;
     top: 0;
@@ -63,7 +51,7 @@ nav .fas {
 
 .name {
     font-weight: bold;
-    font-family: 'Merriweather', serif;
+    font-family: var(--gallery-product-name-font);
     font-size: 18px;
     padding: 1rem 0 8px 0;
 }
@@ -78,13 +66,13 @@ button[type=submit] {
 }
 
 button[type=submit].background-red {
-    background: #f64749;
+    background: var(--button-red-color);
     width: fit-content;
 }
 
 button[type=submit].background-red:hover {
-    background: white;
-    color: #f64749;
+    background: var(--button-red-text-color);
+    color: var(--button-red-color);
 }
 
 .fas {
@@ -103,16 +91,15 @@ input[type=button] {
     button[type=submit].background-red {
         width: calc(50% - 2px);
     }
-
 }
 
 /* ========================================================= Profile ========================================================= */
 
 button[type=submit].background-red-profile {
-    background: #f64749;
+    background: var(--button-red-color);
 }
 
 button[type=submit].background-red-profile:hover {
-    background: white;
-    color: #f64749;
+    color: var(--button-red-color);
+    background: var(--button-red-text-color);
 }

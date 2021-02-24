@@ -5,13 +5,6 @@
     padding-bottom: 40px;
 }
 
-.title {
-    font-weight: 600;
-    font-size:25px;
-    text-align:center;
-    margin: 40px 0 2em 0;
-}
-
 .column-wrapper {
     width:60%;
     display: grid;
@@ -21,6 +14,10 @@
     50% 50%;
     row-gap: 5rem;
     column-gap: 3rem;
+}
+
+.subtitle {
+    margin-bottom: 1em;
 }
 
 .p1, .p2 {
@@ -35,13 +32,6 @@
 
 .p2 {
     grid-area: texto2;
-}
-
-.subtitle-au {
-    font-weight: bold;
-    text-align: center;
-    font-size: 20px;
-    padding-bottom: 1.5rem;
 }
 
 .img1, .img2 {

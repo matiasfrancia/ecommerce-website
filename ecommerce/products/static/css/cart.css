@@ -3,14 +3,6 @@
     --img: url()
 }
 
-.page-title {
-    font-weight: bold;
-    font-size: 25px;
-    font-family: 'Merriweather', serif;
-    padding: 1.5em 0 1.5em 0;
-    text-align:center;
-}
-
 .content-wrapper {
     margin: auto;
     width: 60%;
@@ -26,7 +18,7 @@
 }
 
 table, td, th {
-    border: 1px solid black;
+    border: 1px solid var(--table-border-color);
     border-collapse: collapse;
 }
 
@@ -35,7 +27,7 @@ th, td {
 }
 
 .table-quantity {
-    font-family: arial;
+    font-family: var(--table-number-font);
     text-align:center;
 }
 
@@ -43,9 +35,13 @@ th, td {
     text-align: center;
 }
 
+.table-delete button {
+    padding: 7px 7px;
+}
+
 .table-price, .table-subtotal-price, .table-total-price {
     text-align: center;
-    font-family: arial;
+    font-family: var(--table-number-font);
 }
 
 input[type=submit] {
@@ -97,6 +93,10 @@ button.pay {
     background-size: cover;
 }
 
+#container {
+    margin: auto;
+}
+
 /* ============================================================ MediaQueries ============================================================= */
 
 @media screen and (max-width: 1024px) {
@@ -127,6 +127,8 @@ button.pay {
     }
 
     button.pay {
+        margin-top: 3rem;
+        margin-bottom: 3rem;
         width: 100%;
     }
   

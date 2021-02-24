@@ -44,7 +44,7 @@ function addCookieItem(id){
 function updateCookieItem(id) {
 
     var num  = document.querySelector('.num' + id);
-    var c = Math.round(Number(num.value));
+    var c = Math.round(num.value);
     console.log(c);
     num.value = c;
     console.log(c);

@@ -66,7 +66,7 @@ class ProductDetailView(DetailView):
         return get_object_or_404(Product, id=idToCreate)
 
 class ProductUpdateView(UpdateView):
-    template_name = "product_create.html"
+    template_name = "product_update.html"
     form_class = ProductModelForm
     queryset = Product.objects.all()
 
