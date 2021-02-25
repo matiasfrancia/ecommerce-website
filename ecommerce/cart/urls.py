@@ -5,6 +5,7 @@ app_name = 'cart'
 
 urlpatterns = [
     path('', views.cart_view, name = 'cart'),
-    path('paypal',views.PayPal, name = 'paypal'),
-    path('pay',views.Pagar, name = 'pagar'),
+    path('paypal',views.paypal, name = 'paypal'),
+    path('googlepay',views.googlepay_API, name = 'googlepayAPI'),
+    path('pay',views.paypal_API, name = 'paypalAPI'),
 ]

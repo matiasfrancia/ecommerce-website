@@ -9,11 +9,11 @@ class CreateOrder(PayPalClient):
   """ This is the sample function to create an order. It uses the
     JSON body returned by buildRequestBody() to create an order."""
 
-  def create_order(self, debug=False):
+  def create_order(self, total_price, debug=False):
     request = OrdersCreateRequest()
     request.prefer('return=representation')
     #3. Call PayPal to set up a transaction
-    request.request_body(self.build_request_body())
+    request.request_body(self.build_request_body(total_price))
     response = self.client.execute(request)
     if debug:
       print ('Status Code: ', response.status_code)
@@ -31,7 +31,7 @@ class CreateOrder(PayPalClient):
     """Setting up the JSON request body for creating the order. Set the intent in the
     request body to "CAPTURE" for capture intent flow."""
   @staticmethod
-  def build_request_body():
+  def build_request_body(total_price):
     """Method to create body with CAPTURE intent"""
     return \
       {
@@ -40,7 +40,7 @@ class CreateOrder(PayPalClient):
           {
             "amount": {
               "currency_code": "USD",
-              "value": "0.01",
+              "value": str(total_price),
             }
           }
         ]
