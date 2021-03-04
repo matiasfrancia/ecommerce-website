@@ -20,6 +20,7 @@
 
             <div class="wrapper-button">
                 <a href="/products/create/"><button type="submit" class="create-product-button">Crear nuevo producto</button></a>
+                <a href="/payments/"><button type="submit" class="payments-button">Historial de pagos</button></a>
             </div>
 
             <p class="page-title less-margin-top">Productos</p>
@@ -37,6 +38,7 @@
 
                             <a href="/products/{{product.id}}/update"><button type="submit">Actualizar</button></a>
                             <a href="/products/{{product.id}}/delete"><button type="submit" class="background-red-profile">Eliminar</button></a>
+                            <a href="/products/{{product.id}}/inventory"><button type="submit" class="inventory-button">Inventario</button></a>
                         </div>
 
                     {% else %}
@@ -50,6 +52,7 @@
 
                             <a href="/products/{{product.id}}/update"><button type="submit">Actualizar</button></a>
                             <a href="/products/{{product.id}}/delete"><button type="submit" class="background-red-profile">Eliminar</button></a>
+                            <a href="/products/{{product.id}}/inventory"><button type="submit" class="inventory-button">Inventario</button></a>
                         </div>
 
                     {% endif %}

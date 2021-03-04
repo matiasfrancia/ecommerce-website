@@ -28,7 +28,7 @@
                     <p class="price">${{ product.price|to_clp }}</p>
 
                     <a href="{{product.get_absolute_url}}"><button type="submit">Ver más</button></a>
-                    <button type="submit" class="background-red" onclick="addCookieItem('{{product.id}}')"><i class="fas fa-shopping-cart"></i></button>
+                    <button type="submit" class="background-red" onclick="addCookieItem('{{product.id}}', {{product.stock}})"><i class="fas fa-shopping-cart"></i></button>
                 </div>
 
             {% endif %}

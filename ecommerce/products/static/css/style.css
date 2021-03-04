@@ -50,6 +50,8 @@
     --product-shadow-color: #ccc;
     --gallery-product-name-font: 'Merriweather', serif;
 
+    --product-inventory-button: rgb(71, 71, 71);
+
     /* Product detail */
 
     --purchase-button-border-color: #ddd;

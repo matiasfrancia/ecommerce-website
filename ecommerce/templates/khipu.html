@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Khipu{% endblock %}
+
+{% block styles %}
+    {% load static %}
+    <script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}
+
+{% block content%}
+
+    <h1>Khipu</h1>
+
+    {{form_payment_khipu.render}}
+
+    <script>
+        window.onload = setCookiePi('{{form_payment_khipu.return_id}}')
+    </script>
+
+{% endblock %}

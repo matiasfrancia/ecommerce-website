@@ -32,8 +32,8 @@
                 <p><span>Precio:</span> ${{ object.price|to_clp }}</p>
 
                 <div class="purchase-info">
-                    <input type="number" class="num{{object.id}}" min="0" value="1">
-                    <button type="button" class="btn" onclick="addCookieItem('{{object.id}}')">Agregar al carro</button>
+                    <input type="number" class="num{{object.id}}" min="0" max="{{object.stock}}" value="1">
+                    <button type="button" class="btn" onclick="addCookieItem('{{object.id}}', {{object.stock}})">Agregar al carro</button>
                 </div>
 
             </div>

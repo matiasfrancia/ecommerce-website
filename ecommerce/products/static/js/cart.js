@@ -12,15 +12,27 @@ function getCookie(name){
     return null;
 }
 
+var pi = getCookie('pi')
+
+if (pi == undefined){
+    pi = 0;
+    document.cookie = 'pi=' + pi + ";domain=;path=/"
+}
+
+function setCookiePi(id) {
+    document.cookie = 'pi=' + id + ";domain=;path=/"
+}
+
 var cart = JSON.parse(getCookie('cart'));
 
 if (cart == undefined){
     cart = {}
-    console.log('Cart created', cart)
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
 }
 
-function addCookieItem(id){
+function addCookieItem(id, stock){
+
+    stock = parseInt(stock);
 
     if(document.querySelector('.num' + id)) {
         let num  = document.querySelector('.num' + id);
@@ -37,20 +49,30 @@ function addCookieItem(id){
         cart[id]['cantidad'] += c
     }
 
+    if(cart[id]['cantidad'] > stock) {
+        alert(`Stock: ${stock}`);
+        cart[id]['cantidad'] = stock;
+    }
+
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
     location.reload();
 }
 
-function updateCookieItem(id) {
+function updateCookieItem(id, stock) {
+
+    stock = parseInt(stock);
 
     var num  = document.querySelector('.num' + id);
     var c = Math.round(num.value);
-    console.log(c);
     num.value = c;
-    console.log(c);
-
+    
     if(cart[id] != undefined) {
         cart[id] = {'cantidad': c}
+    }
+
+    if(cart[id]['cantidad'] > stock) {
+        alert(`Stock: ${stock}`);
+        cart[id]['cantidad'] = stock;
     }
 
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
@@ -64,8 +86,6 @@ function removeCookieItem(id) {
 
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
     location.reload();
-
-    console.log("Esta funcionando la funcion remove")
 }
 
 console.log('Cart:',cart)

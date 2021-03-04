@@ -61,7 +61,7 @@ nav .fas {
     padding-bottom: 10px;
 }
 
-button[type=submit] {
+.product button[type=submit] {
     width: calc(50% - 2px);
 }
 

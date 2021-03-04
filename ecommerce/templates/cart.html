@@ -14,7 +14,6 @@
     <!-- Scripts -->
 
     <script src="{% static 'js/cart.js' %}"></script>
-    <script src="{% static 'js/pay.js' %}"></script>
 
 {% endblock %}
 
@@ -23,6 +22,8 @@
     <p class="page-title">Carro de compras</p>
 
     <div class="content-wrapper">
+
+        <!--TODO: hacer una actualización del carrito de ser necesario cuando otro cliente hace una compra del mismo producto-->
 
         <table class="cart-table">
 
@@ -45,11 +46,13 @@
                     </td>
                     <td class="table-name">{{item.product.title}}</td>
                     <td class="table-quantity">
-                        <input type="number" min='1' step='1' name="num" class="num{{item.product.id}}" onchange="updateCookieItem('{{item.product.id}}')" value="{{item.quantity}}">
+                        <input type="number" min='1' step='1' max='{{item.product.stock}}' name="num" class="num{{item.product.id}}" 
+                            onchange="updateCookieItem('{{item.product.id}}', {{item.product.stock}})" value="{{item.quantity}}">
                     </td>
                     <td class="table-price">${{item.product.price | to_clp }}</td>
                     <td class="table-subtotal-price">${{item.subtotal | to_clp }}</td>
-                    <td class="table-delete"><button type="submit" name="removeItem" value="removeItem" onclick="removeCookieItem('{{item.product.id}}')"><i class="far fa-trash-alt"></i></button></td>
+                    <td class="table-delete"><button type="submit" name="removeItem" value="removeItem" 
+                        onclick="removeCookieItem('{{item.product.id}}')"><i class="far fa-trash-alt"></i></button></td>
                 </tr>
 
             {% endfor %}
@@ -70,15 +73,12 @@
 
             </table>
 
-            <button type="submit" class="pay" name="pay" value="pay">Comprar</button>
-            <!--<div id="container"></div>-->
+            {% if total_price > 0 %}
+                <a href="/cart/khipuAPI/"><button type="submit" class="pay" name="pay" value="pay">Comprar</button></a>
+            {% endif %}
 
         </div>
 
     </div>
-
-    <script async
-    src="https://pay.google.com/gp/p/js/pay.js"
-    onload="onGooglePayLoaded()"></script>
 
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Compras{% endblock %}
+
+{% block styles %}
+    {% load my_filters %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/payments.css' %}">
+{% endblock %}
+
+{% block content%}
+
+    <p class="page-title">Pagos</p>
+
+    <div class="payments-container">
+        {% for payment in payments %}
+
+            <div class="payment-container">
+                <p class="payment id">Id pago: {{payment.payment_id}}</p>
+                <p class="payment name">Nombre cliente: {{payment.payer_name}}</p>
+                <p class="payment email">Email cliente: {{payment.payer_email}}</p>
+                {% if payment.pq_list %}
+                    <p class="payment list">
+                        Productos comprados: 
+                        {% for p,q in payment.pq_list %}
+                            {{p}}: {{q}}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+                <p class="payment amount">Monto de compra: {{payment.amount | to_clp}}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

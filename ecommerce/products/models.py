@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+import datetime
 
 # Create your models here.
 class Product(models.Model):
@@ -8,7 +9,7 @@ class Product(models.Model):
     image = models.FileField(upload_to="products/images/")
     price = models.IntegerField()
     active = models.BooleanField(default = True)
-    price_clp = models.CharField(default='', max_length=50)
+    stock = models.IntegerField(default = 0)
 
     def get_absolute_url(self):
         return reverse("products:product-detail", kwargs={"id": self.id})
@@ -27,3 +28,18 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+class Movement(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    mov_data = models.CharField(
+        "Movimiento",
+        max_length = 50,
+        choices = [('entrada', 'Entrada de producto'), ('salida', 'Salida de producto')],
+        null = True,
+        blank = True
+    )
+    date = models.DateField()
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.mov_data + ": " + str(self.date)

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'products',
     'register',
     'cart',
+    'khipu',
 ]
 
 MIDDLEWARE = [
@@ -138,8 +139,11 @@ EMAIL_USE_TLS = True
 # EMAIL_HOST_PASSWORD = ""
 
 LANGUAGE_CODE = 'es'
-TIME_ZONE = 'America/Lima'
+TIME_ZONE = 'America/Santiago'
 USE_I18N = True
 
 LOGIN_REDIRECT_URL = "/profile/"
 LOGOUT_REDIRECT_URL = "/home/"
+
+KHIPU_RECEIVER_ID = '375517'
+KHIPU_SECRET_KEY = 'fdbc235a03059772281806bcdc9a5dd301f35896'

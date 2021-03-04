@@ -5,7 +5,7 @@ form p {
     font-family: var(--form-p-font);
 }
 
-input[type=text], input[type=number], input[type=email], input[type=password], button[type=submit], select, textarea {
+input[type=text], input[type=date], input[type=number], input[type=email], input[type=password], button[type=submit], select, textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid var(--input-border-color);
@@ -27,7 +27,7 @@ input[type=submit], input[type=button], button[type=submit] {
     margin: 1em 0 1em 0;
     width: 50%;
 }
-  
+
 input[type=submit]:hover, input[type=button]:hover, button[type=submit]:hover {
     background-color: var(--button-text-color);
     color: var(--button-background-color);
@@ -36,6 +36,13 @@ input[type=submit]:hover, input[type=button]:hover, button[type=submit]:hover {
 .helptext, li.errorlist {
     font-size: 14px;
     color: var(--form-help-color);
+    display: block;
+    margin-bottom: 1em;
+}
+
+.form-warning {
+    font-weight: bold;
+    color: var(--form-error-color);
     display: block;
     margin-bottom: 1em;
 }
