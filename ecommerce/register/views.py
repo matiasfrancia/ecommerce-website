@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from products.models import Product
 from khipu.models import Payment
-from khipu.views import get_payment_by_id
+from khipu.views import get_payment_by_id, refound
 from django.db.models import Q
 import datetime
+from django.urls import reverse
 
 # Create your views here.
 def register(request):
@@ -103,3 +104,20 @@ def delete_pending_payment(payment):
         if expires_date < now_date:
             return True
     return False
+
+def refoud_view(request, id):
+
+    if request.method == "POST":
+        refounded = False
+        try: 
+            refound(id)
+            refounded = True
+        except:
+            print("El reembolso no pudo ser realizado")
+        
+        if refounded:
+            payment = Payment.objects.get(payment_id=id)
+            payment.delete()
+            return redirect(reverse('payments'))
+
+    return render(request, "refound.html",{"id":id}) 

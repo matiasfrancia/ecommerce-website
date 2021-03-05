@@ -135,3 +135,4 @@ def khipu_API(request):
     })
 
     return render(request, 'khipu.html', {'form_payment_khipu': form_payment_khipu})
+

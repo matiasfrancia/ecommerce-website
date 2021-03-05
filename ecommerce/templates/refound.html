@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Reembolsar pago{% endblock %}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/product_delete.css'  %}">
+{% endblock %}
+
+{% block content %}
+
+    {% if user.is_superuser %}
+
+        <p class="page-title">Reembolsar pago</p>
+
+        <form method="post">{% csrf_token %}
+            <p>Estás seguro de que quieres reembolsar el pago: "{{ id }}"?</p>
+            <input type="submit" value="Reembolsar">
+        </form>
+        
+
+    {% else %}
+
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
+
+{% endblock %}
