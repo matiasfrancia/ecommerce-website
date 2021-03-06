@@ -6,6 +6,7 @@
     <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
     <link rel="stylesheet"  href="{%  static  'css/products_gallery.css'  %}">
     <link rel="stylesheet"  href="{%  static  'css/profile.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/payments.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -27,7 +28,7 @@
 
             <div class="gallery">
                 {% for product in products %}
-                    {% if product.active %}
+                    {% if product.active and product.stock_active %}
 
                         <div class="product product-active">
                             <div class="product-img">
@@ -59,7 +60,29 @@
                 {% endfor %}
             </div>
 
+        {% else %}
+
+            {% for payment in payments %}
+            
+                <div class="payment-container">
+                <p class="payment id">Id pago: {{payment.payment_id}}</p>
+                <p class="payment name">Nombre cliente: {{payment.payer_name}}</p>
+                <p class="payment email">Email cliente: {{payment.payer_email}}</p>
+                {% if payment.cart_products %}
+                    <p class="payment list">
+                        Productos comprados: 
+                        {% for item in payment.cart_products %}
+                            {{item.product_id}} - {{item.product_title}}: {{item.product_quantity}}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+                <p class="payment amount">Monto de compra: {{payment.amount | to_clp }}</p>
+            </div>
+            
+            {% endfor %}
+
         {% endif %}
+
     {% else %}
         <p class="permission-denied">Debes ingresar para ver esta sección</p>
         <div class="wrapper-button">

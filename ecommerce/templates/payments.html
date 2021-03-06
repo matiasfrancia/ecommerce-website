@@ -19,11 +19,11 @@
                 <p class="payment id">Id pago: {{payment.payment_id}}</p>
                 <p class="payment name">Nombre cliente: {{payment.payer_name}}</p>
                 <p class="payment email">Email cliente: {{payment.payer_email}}</p>
-                {% if payment.pq_list %}
+                {% if payment.cart_products %}
                     <p class="payment list">
                         Productos comprados: 
-                        {% for p,q in payment.pq_list %}
-                            {{p}}: {{q}}
+                        {% for item in payment.cart_products %}
+                            {{item.product_id}} - {{item.product_title}}: {{item.product_quantity}}
                         {% endfor %}
                     </p>
                 {% endif %}

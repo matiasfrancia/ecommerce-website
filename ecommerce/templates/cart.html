@@ -23,8 +23,6 @@
 
     <div class="content-wrapper">
 
-        <!--TODO: hacer una actualización del carrito de ser necesario cuando otro cliente hace una compra del mismo producto-->
-
         <table class="cart-table">
 
             <tr>
@@ -80,5 +78,15 @@
         </div>
 
     </div>
+
+    {% if payment_ready %}
+
+        <script>
+            document.cookie = 'cart=' + '{"orden": []}' + ";domain=;path=/"
+            document.cookie = 'pi=' + ";domain=;path=/"
+            location.reload();
+        </script>
+
+    {% endif %}
 
 {% endblock %}

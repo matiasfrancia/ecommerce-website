@@ -5,6 +5,7 @@ from khipu.models import Payment
 from khipu.views import get_payment_by_id
 from django.db.models import Q
 import datetime
+import json
 
 # Create your views here.
 def register(request):
@@ -20,11 +21,45 @@ def register(request):
 
     return render(request, "register/register.html", context)
 
+# Integrar la api de algún servicio de envío
+
 def profile(request):
 
     products = Product.objects.all()
 
-    context = {"products": products}
+    context = {}
+
+    if request.user.is_superuser:
+        # si el stock de un producto es 0, se debe desactivar
+        for product in products:
+            if product.stock == 0:
+                product.stock_active = False
+            else:
+                product.stock_active = True
+            product.save()
+
+        context = {"products": products}
+    
+    else:
+        payments = request.user.payment_set.all()
+
+        payments_parsed = []
+
+        for payment in payments:
+            custom = json.loads(payment.custom)
+            cart_products = custom['cart_products']
+
+            pay_dict = {
+                'cart_products': cart_products,
+                'amount': int(payment.amount[:-5]),
+                'payment_id': payment.payment_id,
+                'payer_email': payment.payer_email,
+                'payer_name': payment.payer_name,
+            }
+
+            payments_parsed.append(pay_dict)
+
+        context = {"products": products, "payments": payments_parsed}
 
     return render(request, "profile.html", context)
 
@@ -42,10 +77,7 @@ def payments(request):
 
     for i in range(len(payments_update)-1, -1, -1):
         if delete_pending_payment(payments_update[i]):
-            payments_update[i].delete()
-
-    """ for payment in payments_update:
-        print("ID: ", payment.payment_id, ", Fecha de expiración: ", payment.expires_date) """
+            payments_update[i].delete()        
 
     # Guardamos en una lista los pagos a imprimir en pantalla
             
@@ -56,15 +88,39 @@ def payments(request):
 
     payments_parsed = []
 
+    # obtenemos la lista de productos
+    products = Product.objects.all()
+
     for payment in payments:
         
-        custom = payment.custom.split('&&')
+        """ custom = payment.custom.split('&&')
         pq_parsed = product_quantity_parser(custom)
         if pq_parsed == [('', '')]:
-            pq_parsed = []
+            pq_parsed = [] """
 
+        # descontar del stock las nuevas compras realizadas
+        custom = json.loads(payment.custom)
+        cart_products = custom['cart_products']
+
+        date_movement = datetime.date.today()
+
+        for item in cart_products:
+
+            product = products.get(id=item['product_id'])
+
+            delta_quantity = item['product_quantity']
+
+            if product.stock - delta_quantity >= 0:
+                product.stock -= delta_quantity
+                product.movement_set.create(mov_data = 'salida', date = date_movement, quantity = delta_quantity)
+                product.save()
+            else:
+                error = """Si agrega esta salida, el stock total del producto será negativo. 
+                            Procure que siempre sea positivo o 0."""
+
+        # formateamos la información para pasársela al template
         pay_dict = {
-            'pq_list': pq_parsed,
+            'cart_products': cart_products,
             'amount': int(payment.amount[:-5]),
             'payment_id': payment.payment_id,
             'payer_email': payment.payer_email,
@@ -78,7 +134,7 @@ def payments(request):
     return render(request, "payments.html", context)
 
 # return [(product, quantity), ...]
-def product_quantity_parser(list):
+""" def product_quantity_parser(list):
     parsed_list = []
     for pq in list:
         div_pos = 0
@@ -89,7 +145,7 @@ def product_quantity_parser(list):
         p = pq[:div_pos]
         q = pq[div_pos+1::]
         parsed_list.append((p, q))
-    return parsed_list
+    return parsed_list """
 
 # función que retorna true si el pago debe ser eliminado, false en caso contrario
 def delete_pending_payment(payment):

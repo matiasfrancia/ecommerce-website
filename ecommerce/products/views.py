@@ -121,9 +121,21 @@ class ProductCreateView(CreateView):
     def get_success_url(self):
         return reverse('products:product-categories', kwargs={'id': self.object.pk})
 
-class ProductListView(ListView):
-    template_name = "product_list.html"
-    queryset = Product.objects.all()
+def product_list(request):
+
+    products = Product.objects.all()
+
+    # si el stock de un producto es 0, se debe desactivar
+    for product in products:
+        if product.stock == 0:
+            product.stock_active = False
+        else:
+            product.stock_active = True
+        product.save()
+
+    context = {"products": products}
+
+    return render(request, "product_list.html", context)
 
 class ProductDetailView(DetailView):
     template_name = "product_detail.html"

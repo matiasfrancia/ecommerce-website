@@ -17,8 +17,8 @@
 
     <div class="gallery">
 
-        {% for product in object_list%}
-            {% if product.active %}
+        {% for product in products%}
+            {% if product.active and product.stock_active %}
 
                 <div class="product">
                     <div class="product-img">

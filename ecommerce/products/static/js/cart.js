@@ -15,7 +15,7 @@ function getCookie(name){
 var pi = getCookie('pi')
 
 if (pi == undefined){
-    pi = 0;
+    pi = '';
     document.cookie = 'pi=' + pi + ";domain=;path=/"
 }
 
@@ -26,7 +26,7 @@ function setCookiePi(id) {
 var cart = JSON.parse(getCookie('cart'));
 
 if (cart == undefined){
-    cart = {}
+    cart = {"orden": []}
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
 }
 
@@ -52,6 +52,15 @@ function addCookieItem(id, stock){
     if(cart[id]['cantidad'] > stock) {
         alert(`Stock: ${stock}`);
         cart[id]['cantidad'] = stock;
+    }
+
+    if(cart['orden'] == undefined){
+        cart['orden'] = [id]
+    }
+    else {
+        if(!cart['orden'].includes(id)){
+            cart['orden'].push(id)
+        }
     }
 
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
@@ -82,6 +91,8 @@ function updateCookieItem(id, stock) {
 function removeCookieItem(id) {
     if(cart[id] != undefined) {
         delete cart[id]
+        var index = cart['orden'].indexOf(id)
+        cart['orden'].splice(index, 1)
     }
 
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"

@@ -8,36 +8,44 @@
 
 {% block content %}
 
-    <div class="product-container">
+        {% if object.active and object.stock_active or user.is_superuser %}
+            <div class="product-container">
 
-        <div class="product-wrapper">
-            <div class="product-gallery">
-                <img src="{{ object.image.url }}" alt="imagen de {{ object.title }}">
-            </div>
+                <div class="product-wrapper">
+                    <div class="product-gallery">
+                        <img src="{{ object.image.url }}" alt="imagen de {{ object.title }}">
+                    </div>
 
-            <div class="product-info">
+                    <div class="product-info">
 
-                <h2>{{ object.title }}</h2>
-                <p class="subtitle">Descripción:</p>
-                <p>{{ object.description|linebreaksbr }}</p>
-                
-                {% if object.category_set.all %}
-                    <p class="subtitle">Categorias:</p>
-                {% endif %}
-                
-                {% for categ in object.category_set.all %}
-                    <p><span class="categ-name">{{categ.name}}:</span>{{categ.value}}</p>
-                {% endfor %}
+                        <h2>{{ object.title }}</h2>
+                        <p class="subtitle">Descripción:</p>
+                        <p>{{ object.description|linebreaksbr }}</p>
+                        
+                        {% if object.category_set.all %}
+                            <p class="subtitle">Categorias:</p>
+                        {% endif %}
+                        
+                        {% for categ in object.category_set.all %}
+                            <p><span class="categ-name">{{categ.name}}:</span>{{categ.value}}</p>
+                        {% endfor %}
 
-                <p><span>Precio:</span> ${{ object.price|to_clp }}</p>
+                        <p><span>Precio:</span> ${{ object.price|to_clp }}</p>
 
-                <div class="purchase-info">
-                    <input type="number" class="num{{object.id}}" min="0" max="{{object.stock}}" value="1">
-                    <button type="button" class="btn" onclick="addCookieItem('{{object.id}}', {{object.stock}})">Agregar al carro</button>
+                        <div class="purchase-info">
+                            <input type="number" class="num{{object.id}}" min="0" max="{{object.stock}}" value="1">
+                            <button type="button" class="btn" onclick="addCookieItem('{{object.id}}', {{object.stock}})">Agregar al carro</button>
+                        </div>
+
+                    </div>
                 </div>
 
             </div>
-        </div>
 
-    </div>
+        {% else %}
+
+            <p class="permission-denied">Este producto no está activo.</p>
+
+        {% endif %}
+
 {% endblock %}

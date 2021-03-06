@@ -18,40 +18,47 @@ def cart_view(request):
     # TODO: hacer una función async que cargue el template sólo si se completo la petición
 
     # obtenemos las cookies con el id
+
+    items = []
+    total_price = 0
+    payment_ready = False
+
     try:
-        payment_id = request.COOKIES.get(['pi'])
-        get_payment_by_id(payment_id)
+        payment_id = request.COOKIES.get('pi')
+        print("Paymend ID: ", payment_id)
+        if payment_id != '':
+            get_payment_by_id(payment_id)
 
-        # comprobamos si el pago fue realizado
-        payment = Payment.objects.get(payment_id=payment_id)
+            # comprobamos si el pago fue realizado
+            payment = Payment.objects.get(payment_id=payment_id)
 
-        if payment.status == 'done':
-            items = {}
-            total_price = 0
-        else:
-            items, total_price = get_cart(request)
-
+            print("Payment status: ", payment.status)
+            if payment.status == 'done':
+                payment_ready = True
     except:
-        payment_id = ''
-        items, total_price = get_cart(request)
+        print("Except")
 
-    context = {"items":items, "total_price": total_price}
+    items, total_price = get_cart(request)
+
+    context = {"items":items, "total_price": total_price, "payment_ready": payment_ready}
     
     return render(request, "cart.html", context)
 
-def get_cart(request):
+    # y acá se debe eliminar el id de las cookies, para que no borre los productos del carro cuando se quiera comprar algo más
+
+def get_cart(request, to_json = False):
     try:
         cart = json.loads(request.COOKIES['cart'])
     except:
-        cart = {}
+        cart = {"orden": []}
 
     items = []
     total_price = 0
 
-    for i in cart:
+    for product_id in cart['orden']:
 
-        product = Product.objects.get(id=i)
-        quantity = abs(int(cart[i]['cantidad']))
+        product = Product.objects.get(id=product_id)
+        quantity = abs(int(cart[product_id]['cantidad']))
 
         if quantity > product.stock:
             quantity = product.stock
@@ -59,16 +66,24 @@ def get_cart(request):
         if quantity == 0:
             quantity = 1
 
-        item = {
-            "product": product,
-            "quantity": quantity,
-            "subtotal": quantity * product.price,
-        }
+        if not to_json:
+            item = {
+                "product": product,
+                "quantity": quantity,
+                "subtotal": quantity * product.price,
+            }
+        else:
+            item = {
+                "product_title": product.title,
+                "product_id": product.id,
+                "product_quantity": quantity,
+                "subtotal": quantity * product.price,
+            }
 
-        if product.active:
+        if product.active and product.stock_active:
             items.append(item)
             total_price += item['subtotal']
-    
+
     return (items,total_price)
 
 # ========================================================== PayPal ==========================================================
@@ -103,18 +118,19 @@ def convert_clp_to_usd(price):
 
 def khipu_API(request):
 
-    # Tenemos que hacer que cree un objeto Payment sólo cuando ya se presionó el botón de khipu,
-    # sino vamos a crear uno cada vez que se recarga esta página
-
     # cart_products: lista item = [{'product', 'quantity', 'subtotal'}, ...]
-    cart_products, cart_total = get_cart(request)
+    cart_products, cart_total = get_cart(request, True)
 
-    cart_string = ""
+    dicc_custom = {"cart_products": cart_products}
+    json_custom = json.dumps(dicc_custom)
+
+    """ cart_string = ""
 
     for item in cart_products:
+        # TODO: pasar también el id del producto
         cart_string += item['product'].title + ":" + str(item['quantity']) + "&&"
 
-    cart_string = cart_string[:-2]
+    cart_string = cart_string[:-2] """
 
     # Obtenemos la fecha de expiración
     now = datetime.datetime.today()
@@ -129,9 +145,15 @@ def khipu_API(request):
         'subject': 'Esto es un pago de pruebas via Django-Form',
         'currency': 'CLP',
         'amount': str(cart_total) + '.0000',
-        'return_url': request.build_absolute_uri(reverse('home')),
-        'custom': cart_string,
+        'return_url': request.build_absolute_uri(reverse('cart:cart_view')),
+        'custom': json_custom,
         'expires_date': expires_date,
     })
+
+    # obtenemos el objeto del pago a través del id
+    payment_id = form_payment_khipu.return_id()
+
+    payment = Payment.objects.get(payment_id=payment_id)
+    request.user.payment_set.add(payment)
 
     return render(request, 'khipu.html', {'form_payment_khipu': form_payment_khipu})

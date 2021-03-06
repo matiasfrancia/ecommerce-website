@@ -10,6 +10,7 @@ class Product(models.Model):
     price = models.IntegerField()
     active = models.BooleanField(default = True)
     stock = models.IntegerField(default = 0)
+    stock_active = models.BooleanField(default = False)
 
     def get_absolute_url(self):
         return reverse("products:product-detail", kwargs={"id": self.id})
