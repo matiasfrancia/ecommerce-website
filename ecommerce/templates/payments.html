@@ -28,6 +28,7 @@
                     </p>
                 {% endif %}
                 <p class="payment amount">Monto de compra: {{payment.amount | to_clp}}</p>
+                <a href="{% url 'refound' payment.payment_id %}">Reembolsar</a>
             </div>
         {% endfor %}
     </div>

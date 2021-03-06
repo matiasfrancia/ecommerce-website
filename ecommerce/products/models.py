@@ -31,7 +31,7 @@ class Category(models.Model):
         return self.name
 
 class Movement(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     mov_data = models.CharField(
         "Movimiento",
         max_length = 50,

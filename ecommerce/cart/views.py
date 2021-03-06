@@ -124,14 +124,6 @@ def khipu_API(request):
     dicc_custom = {"cart_products": cart_products}
     json_custom = json.dumps(dicc_custom)
 
-    """ cart_string = ""
-
-    for item in cart_products:
-        # TODO: pasar también el id del producto
-        cart_string += item['product'].title + ":" + str(item['quantity']) + "&&"
-
-    cart_string = cart_string[:-2] """
-
     # Obtenemos la fecha de expiración
     now = datetime.datetime.today()
 
@@ -142,7 +134,7 @@ def khipu_API(request):
 
     form_payment_khipu = KhipuCreatePaymentForm(**{
         # tenemos que vaciar el carro una vez que se completa el pago
-        'subject': 'Esto es un pago de pruebas via Django-Form',
+        'subject': 'Esto es un pago de ' + str(request.user),
         'currency': 'CLP',
         'amount': str(cart_total) + '.0000',
         'return_url': request.build_absolute_uri(reverse('cart:cart_view')),
@@ -150,10 +142,12 @@ def khipu_API(request):
         'expires_date': expires_date,
     })
 
-    # obtenemos el objeto del pago a través del id
-    payment_id = form_payment_khipu.return_id()
+    # si el usuario está registrado, le adjudicamos el pago
+    if request.user.is_authenticated:
+        # obtenemos el objeto del pago a través del id
+        payment_id = form_payment_khipu.return_id()
 
-    payment = Payment.objects.get(payment_id=payment_id)
-    request.user.payment_set.add(payment)
+        payment = Payment.objects.get(payment_id=payment_id)
+        request.user.payment_set.add(payment)
 
     return render(request, 'khipu.html', {'form_payment_khipu': form_payment_khipu})

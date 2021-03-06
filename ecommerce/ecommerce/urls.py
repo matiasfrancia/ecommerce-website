@@ -33,6 +33,7 @@ urlpatterns = [
     path("", include("django.contrib.auth.urls")),
     path("profile/", register_views.profile, name="profile"),
     path("payments/", register_views.payments, name="payments"),
+    path("refound/<id>", register_views.refound_view, name="refound"),
     re_path(r'^khipu/', include('khipu.urls')),
 ]
 
