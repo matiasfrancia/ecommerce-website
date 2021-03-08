@@ -20,24 +20,22 @@
             </div>
         {% endif %}
 
+        <div class="content-wrapper">
+            Stock: {{p.stock}}
+        </div>
+
         <form method="post" action=".">{% csrf_token %}
 
             <div class="stock-wrapper">
                 {% for mov in movement_list %}
 
                     <div class="movement-wrapper">
-                    
                         <input type="checkbox" name="movement_id{{mov.id}}" value="clicked">
-                        <div class="mov-type">
-                            {{mov.mov_data}}
+                        <div>
+                            <div class="mov-type">{{mov.mov_data}}</div>
+                            <div class="mov-date">{{mov.date}}</div>
+                            <div class="mov-quantity">{{mov.quantity}}</div>
                         </div>
-                        <div class="mov-date">
-                            {{mov.date}}
-                        </div>
-                        <div class="mov-quantity">
-                            {{mov.quantity}}
-                        </div>
-
                     </div>
 
                 {% endfor %}
@@ -56,13 +54,11 @@
             <input type="number" name="newQuantity">
 
             </br></br>
-            <button type="submit" name="newMovement" value="newMovement">Agregar movimiento</button>
-            <button type="submit" name="delMovement" value="delMovement">Eliminar movimiento(s)</button>
+            <div class="side-by-side">
+                <button type="submit" name="newMovement" value="newMovement">Agregar movimiento</button>
+                <button type="submit" name="delMovement" value="delMovement">Eliminar movimiento(s)</button>
+            </div>
         </form>
-
-        <div class="content-wrapper">
-            {{p.stock}}
-        </div>
 
     {% else %}
 

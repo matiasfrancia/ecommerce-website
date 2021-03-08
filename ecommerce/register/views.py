@@ -7,6 +7,8 @@ from django.db.models import Q
 import datetime
 import json
 from django.urls import reverse
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
 
 # Create your views here.
 def register(request):
@@ -14,8 +16,11 @@ def register(request):
     form = RegisterForm(request.POST or None)
 
     if form.is_valid():
-        form.save()
-
+        new_user = form.save()
+        new_user = authenticate(username=form.cleaned_data['username'],
+                                password=form.cleaned_data['password1'],
+                                )
+        login(request, new_user)
         return redirect('/home/')
 
     context = {"form": form}
@@ -65,7 +70,11 @@ def profile(request):
     return render(request, "profile.html", context)
 
 def payments(request):
+    if request.user.is_superuser:
+        return render(request, "payments.html")
+    return render(request, "payments.html")
 
+def payment_data(request):
     # Actualizamos el estado de las compras que no están terminadas (en la db)
 
     payments_update = Payment.objects.exclude(status = 'done')
@@ -129,24 +138,9 @@ def payments(request):
         }
 
         payments_parsed.append(pay_dict)
+    
+    return JsonResponse(payments_parsed, safe=False)
 
-    context = {'payments': payments_parsed}
-
-    return render(request, "payments.html", context)
-
-# return [(product, quantity), ...]
-""" def product_quantity_parser(list):
-    parsed_list = []
-    for pq in list:
-        div_pos = 0
-        for i in range(len(pq)-1, -1, -1):
-            if pq[i] == ':':
-                div_pos = i
-                break
-        p = pq[:div_pos]
-        q = pq[div_pos+1::]
-        parsed_list.append((p, q))
-    return parsed_list """
 
 # función que retorna true si el pago debe ser eliminado, false en caso contrario
 def delete_pending_payment(payment):

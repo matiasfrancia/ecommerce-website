@@ -6,31 +6,24 @@
     {% load my_filters %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/payments.css' %}">
+    <link rel="stylesheet" href="{% static 'css/spinner.css' %}">
 {% endblock %}
 
 {% block content%}
 
-    <p class="page-title">Pagos</p>
+    {% if user.is_superuser %}
+        <p class="page-title">Pagos</p>
 
-    <div class="payments-container">
-        {% for payment in payments %}
+        <div id="loading">
+            <div class="spinner"></div>
+        </div>
 
-            <div class="payment-container">
-                <p class="payment id">Id pago: {{payment.payment_id}}</p>
-                <p class="payment name">Nombre cliente: {{payment.payer_name}}</p>
-                <p class="payment email">Email cliente: {{payment.payer_email}}</p>
-                {% if payment.cart_products %}
-                    <p class="payment list">
-                        Productos comprados: 
-                        {% for item in payment.cart_products %}
-                            {{item.product_id}} - {{item.product_title}}: {{item.product_quantity}}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-                <p class="payment amount">Monto de compra: {{payment.amount | to_clp}}</p>
-                <a href="{% url 'refound' payment.payment_id %}">Reembolsar</a>
-            </div>
-        {% endfor %}
-    </div>
+        <div class="payments-container" id="payments">
+        </div>
+        <script src="{% static 'js/payment_load.js' %}"></script>
+    {% else %}
 
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
 {% endblock %}

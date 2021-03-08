@@ -4,8 +4,55 @@
     margin: auto;
 }
 
-@media screen and (max-width: 720px) {
+.stock-wrapper{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(30%,1fr));
+    margin-bottom: 3rem;
+}
+
+.movement-wrapper{
+    display: flex;
+    gap: 1em;
+    padding: 1em 0;
+    box-sizing: border-box;
+}
+
+.movement-wrapper > div{
+    border-left: 1px solid black;
+    padding-left: .5em;
+}
+
+.mov-type{
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.side-by-side{
+    display: flex;
+    gap: 1em;
+}
+
+@media screen and (max-width: 850px) {
     .content-wrapper {
         width: 80%;
+    }
+
+    .stock-wrapper{
+        grid-template-columns: 1fr;
+    }
+
+    .movement-wrapper > div{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .side-by-side{
+        display: block;
+    }
+
+    .side-by-side button{
+        width: 100%;
     }
 }

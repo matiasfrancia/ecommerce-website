@@ -7,6 +7,15 @@
     <link rel="stylesheet"  href="{%  static  'css/products_gallery.css'  %}">
     <link rel="stylesheet"  href="{%  static  'css/profile.css'  %}">
     <link rel="stylesheet"  href="{%  static  'css/payments.css' %}">
+    <style>
+        .payment-container {
+            grid-template: "id          productos" 1em
+                   "nombre      productos" 6em
+                   "email       productos" 1fr
+                   "monto       monto    " 2em/
+                   1fr          1fr;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -66,13 +75,13 @@
             
                 <div class="payment-container">
                 <p class="payment id">Id pago: {{payment.payment_id}}</p>
-                <p class="payment name">Nombre cliente: {{payment.payer_name}}</p>
-                <p class="payment email">Email cliente: {{payment.payer_email}}</p>
+                <p class="payment name">Nombre cliente: <br> {{payment.payer_name}}</p>
+                <p class="payment email">Email cliente: <br> {{payment.payer_email}}</p>
                 {% if payment.cart_products %}
                     <p class="payment list">
-                        Productos comprados: 
+                        Productos comprados: <br>
                         {% for item in payment.cart_products %}
-                            {{item.product_id}} - {{item.product_title}}: {{item.product_quantity}}
+                            {{item.product_id}} - {{item.product_title}}: {{item.product_quantity}} <br>
                         {% endfor %}
                     </p>
                 {% endif %}
