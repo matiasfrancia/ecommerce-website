@@ -1,0 +1,24 @@
+
+.page-title {
+    font-size: 23px;
+}
+
+.form-wrapper {
+    display: flex;
+    margin: auto;
+    width: 60%;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+form {
+    all:unset;
+}
+
+form input[type=image]:first-of-type {
+    margin-right: 1.5rem;
+}
+
+form input[type=image]:last-of-type {
+    margin-left: 1.5rem;
+}

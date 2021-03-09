@@ -1,6 +1,7 @@
 from django.shortcuts import render, reverse, redirect
 import json
 from products.models import Product
+from register.views import enter_movements_payment
 from google_currency import convert
 
 from khipu.models import Payment
@@ -25,7 +26,6 @@ def cart_view(request):
 
     try:
         payment_id = request.COOKIES.get('pi')
-        print("Paymend ID: ", payment_id)
         if payment_id != '':
             get_payment_by_id(payment_id)
 
@@ -33,8 +33,19 @@ def cart_view(request):
             payment = Payment.objects.get(payment_id=payment_id)
 
             print("Payment status: ", payment.status)
+
             if payment.status == 'done':
                 payment_ready = True
+                if 'shipping_data' in request.session:
+                    del request.session['shipping_data']
+                    
+                # descontar del stock las nuevas compras realizadas
+                negatives_stocks = enter_movements_payment('salida', payment)
+                
+                # agregamos negatives_stocks a las variables de sesión si != []
+                if negatives_stocks != []:
+                    request.session[id] = {'negatives_stocks': negatives_stocks}
+
     except:
         print("Except")
 
@@ -118,36 +129,81 @@ def convert_clp_to_usd(price):
 
 def khipu_API(request):
 
-    # cart_products: lista item = [{'product', 'quantity', 'subtotal'}, ...]
-    cart_products, cart_total = get_cart(request, True)
+    # creamos un pago únicamente si no hay uno ya en las cookies
+    payment_id = request.COOKIES.get('pi')
 
-    dicc_custom = {"cart_products": cart_products}
-    json_custom = json.dumps(dicc_custom)
+    if not payment_id:
 
-    # Obtenemos la fecha de expiración
-    now = datetime.datetime.today()
+        # cart_products: lista item = [{'product', 'quantity', 'subtotal'}, ...]
+        cart_products, cart_total = get_cart(request, True)
 
-    expires_date = now + datetime.timedelta(hours=12)
-    expires_date = expires_date.replace(microsecond=0).isoformat() + 'Z'
+        dicc_custom = {"cart_products": cart_products}
+        json_custom = json.dumps(dicc_custom)
 
-    # Hace la llamada a khipu
+        # Obtenemos la fecha de expiración
+        now = datetime.datetime.today()
 
-    form_payment_khipu = KhipuCreatePaymentForm(**{
-        # tenemos que vaciar el carro una vez que se completa el pago
-        'subject': 'Esto es un pago de ' + str(request.user),
-        'currency': 'CLP',
-        'amount': str(cart_total) + '.0000',
-        'return_url': request.build_absolute_uri(reverse('cart:cart_view')),
-        'custom': json_custom,
-        'expires_date': expires_date,
-    })
+        expires_date = now + datetime.timedelta(hours=12)
+        expires_date = expires_date.replace(microsecond=0).isoformat() + 'Z'
 
-    # si el usuario está registrado, le adjudicamos el pago
-    if request.user.is_authenticated:
+        # crea el fomulario para la conexión con khipu
+        form_payment_khipu = KhipuCreatePaymentForm(**{'payment_id': payment_id})
+
+        # se conecta con khipu y crea la instancia de CreatePayment
+        form_payment_khipu.khipu_service(**{
+            # tenemos que vaciar el carro una vez que se completa el pago
+            'subject': 'Esto es un pago de ' + str(request.user),
+            'currency': 'CLP',
+            'amount': str(cart_total) + '.0000',
+            'return_url': request.build_absolute_uri(reverse('cart:cart_view')),
+            'custom': json_custom,
+            'expires_date': expires_date,
+        })
+        
         # obtenemos el objeto del pago a través del id
         payment_id = form_payment_khipu.return_id()
 
-        payment = Payment.objects.get(payment_id=payment_id)
-        request.user.payment_set.add(payment)
+        # si el usuario está registrado, le adjudicamos el pago
+        if request.user.is_authenticated:
+            payment = Payment.objects.get(payment_id=payment_id)
+            request.user.payment_set.add(payment)
+        
+        if 'shipping_data' in request.session:
+            info = request.session['shipping_data']
+            print(info)
+            payment = Payment.objects.get(payment_id=payment_id)
+            payment.direction = info['direction']
+            payment.city = info['city']
+            payment.cellphone = info['cellphone']
+            payment.save()
 
-    return render(request, 'khipu.html', {'form_payment_khipu': form_payment_khipu})
+    else:
+        form_payment_khipu = KhipuCreatePaymentForm(**{'payment_id': payment_id})
+
+
+    return render(request, 'khipu.html', {'form_payment_khipu': form_payment_khipu, 'payment_id': payment_id})
+
+def shipping_data(request):
+
+    print(Payment.objects.get(payment_id='xgmzvlsfu4sm').direction)
+
+    if 'shipping_data' in request.session:
+        info = request.session['shipping_data']
+    else:
+        info = {"direction": "", "city": "", "cellphone": ""}
+
+    if request.method == "POST" and request.POST.get("save"):
+
+        direction = request.POST.get("direction")
+        city = request.POST.get("city")
+        cellphone = request.POST.get("cellphone")
+
+        if direction and city and cellphone:
+            info = {"direction": direction, "city": city, "cellphone": cellphone}
+
+            # guardamos la información en session variables para obtenerlas en otra vista
+            request.session['shipping_data'] = info
+
+            return redirect('/cart/khipuAPI/')
+
+    return render(request, 'shipping_data.html', {"info": info})

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Khipu{% endblock %}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}"
+
+    <script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}
+
+{% block content%}
+
+    <p class="page-title">Información de despacho</p>
+
+    <form action="." method="post">{% csrf_token %}
+        <p>Dirección: </p>
+        <input type="text" name="direction" value="{{info.direction}}" required>
+        <p>Ciudad: </p>
+        <input type="text" name="city" value="{{info.city}}" required>
+        <p>Celular: </p>
+        <input type="text" name="cellphone" value="{{info.cellphone}}" required>
+        <input type="submit" name="save" value="Continuar">
+    </form>
+
+{% endblock %}

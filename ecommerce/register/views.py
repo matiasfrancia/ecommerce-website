@@ -74,6 +74,16 @@ def payments(request):
         id = payment.payment_id
         get_payment_by_id(id)
 
+        if payment.status == 'done':
+
+            # descontar del stock las nuevas compras realizadas
+            negatives_stocks = enter_movements_payment('salida', payment)
+            """ print("ID: ", payment.payment_id, "negatives_stocks: ", negatives_stocks) """
+            
+            # agregamos negatives_stocks a las variables de sesión si != []
+            if negatives_stocks != []:
+                request.session[id] = {'negatives_stocks': negatives_stocks}
+
     # Si ya expiró el pago (y aún no está pagado) entonces lo elimina de la base de datos
 
     for i in range(len(payments_update)-1, -1, -1):
@@ -94,33 +104,18 @@ def payments(request):
 
     for payment in payments:
         
-        """ custom = payment.custom.split('&&')
-        pq_parsed = product_quantity_parser(custom)
-        if pq_parsed == [('', '')]:
-            pq_parsed = [] """
-
-        # descontar del stock las nuevas compras realizadas
         custom = json.loads(payment.custom)
         cart_products = custom['cart_products']
 
-        date_movement = datetime.date.today()
-
-        for item in cart_products:
-
-            product = products.get(id=item['product_id'])
-
-            delta_quantity = item['product_quantity']
-
-            if product.stock - delta_quantity >= 0:
-                product.stock -= delta_quantity
-                product.movement_set.create(mov_data = 'salida', date = date_movement, quantity = delta_quantity)
-                product.save()
-            else:
-                error = """Si agrega esta salida, el stock total del producto será negativo. 
-                            Procure que siempre sea positivo o 0."""
+        # obtenemos de las session variables negatives_stocks
+        if payment.payment_id in request.session:
+            negatives_stocks = request.session[payment.payment_id]['negatives_stocks']
+        else:
+            negatives_stocks = []
 
         # formateamos la información para pasársela al template
         pay_dict = {
+            'negatives_stocks': negatives_stocks, # puede ser [] si no hubo problemas de stock
             'cart_products': cart_products,
             'amount': int(payment.amount[:-5]),
             'payment_id': payment.payment_id,
@@ -133,20 +128,7 @@ def payments(request):
     context = {'payments': payments_parsed}
 
     return render(request, "payments.html", context)
-
-# return [(product, quantity), ...]
-""" def product_quantity_parser(list):
-    parsed_list = []
-    for pq in list:
-        div_pos = 0
-        for i in range(len(pq)-1, -1, -1):
-            if pq[i] == ':':
-                div_pos = i
-                break
-        p = pq[:div_pos]
-        q = pq[div_pos+1::]
-        parsed_list.append((p, q))
-    return parsed_list """
+                            
 
 # función que retorna true si el pago debe ser eliminado, false en caso contrario
 def delete_pending_payment(payment):
@@ -174,6 +156,54 @@ def refound_view(request, id):
         if refounded:
             payment = Payment.objects.get(payment_id=id)
             payment.delete()
+
+            negatives_stocks = enter_movements_payment('entrada', payment)
+
+            # se elimina negatives_stocks de las variables de sesión 
+            # (también se debería hacer en caso de que se arregle el problema de stock)
+            if payment.payment_id in request.session:
+                del request.session[payment.payment_id]
+
             return redirect(reverse('payments'))
 
     return render(request, "refound.html",{"id":id}) 
+
+
+# ingresa los movimientos correspondientes a un carro de compras (puede ser entrada o salida)
+# retorna una lista con los productos que quedaron con stock negativo
+def enter_movements_payment(movement_type, payment):
+
+    try:
+        products = Product.objects.all()
+
+        custom = json.loads(payment.custom)
+        cart_products = custom['cart_products']
+        date_movement = datetime.date.today()
+
+        negatives_stocks = []
+
+        for item in cart_products:
+
+            product = products.get(id=item['product_id'])
+            delta_quantity = item['product_quantity']
+
+            # si el stock queda negativo se puede solucionar reembolsando el dinero o agregando otra entrada del producto
+            if movement_type == 'salida':
+                
+                if product.stock - delta_quantity < 0:
+                    negatives_stocks.append("ID - Producto: " + str(product.id) + " - " + product.title + ", Stock final: " + str(product.stock))
+
+                product.stock -= delta_quantity
+                product.movement_set.create(mov_data = 'salida', date = date_movement, quantity = delta_quantity)
+                product.save()
+
+            elif movement_type == 'entrada':
+                product.stock += delta_quantity
+                product.movement_set.create(mov_data = 'entrada', date = date_movement, quantity = delta_quantity)
+                product.save()
+
+        return negatives_stocks
+
+    except:
+        print("Hubo algún error en la operación")
+        return []

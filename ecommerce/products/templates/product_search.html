@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    Productos
+{% endblock %}
+
+{% block styles %}
+    {% load my_filters %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/products_gallery.css'  %}">
+{% endblock %}
+
+{% block content %}
+
+    <p class="page-title">Resultados de {{search_data}}</p>
+
+    {% if products %}
+        <div class="gallery">
+
+            {% for product in products%}
+                {% if product.active and product.stock_active %}
+
+                    <div class="product">
+                        <div class="product-img">
+                            <div class="imagen" style="--img: url('{{product.image.url}}')"></div>
+                        </div>
+                        <p class="name">{{product.title}}</p>
+                        <p class="price">${{ product.price|to_clp }}</p>
+
+                        <a href="{{product.get_absolute_url}}"><button type="submit">Ver más</button></a>
+                        <button type="submit" class="background-red" onclick="addCookieItem('{{product.id}}', {{product.stock}})"><i class="fas fa-shopping-cart"></i></button>
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+
+        </div>
+    {% else %}
+
+        <p class="permission-denied" style="text-align:center;">No se encontraron resultados de su búsqueda, <br>intente poniéndole tílde a las palabras o quitándoselos.</p>
+
+    {% endif %}
+
+{% endblock %}

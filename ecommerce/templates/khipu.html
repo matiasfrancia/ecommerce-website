@@ -4,14 +4,19 @@
 
 {% block styles %}
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/khipu.css' %}">
+
     <script src="{% static 'js/cart.js' %}"></script>
 {% endblock %}
 
 {% block content%}
 
-    <h1>Khipu</h1>
+    <p class="page-title">Escoja su método de pago</p>
 
-    {{form_payment_khipu.render}}
+    <div class="form-wrapper">
+        {{form_payment_khipu.render}}
+    </div>
 
     <script>
         window.onload = setCookiePi('{{form_payment_khipu.return_id}}')

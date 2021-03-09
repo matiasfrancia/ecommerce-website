@@ -11,10 +11,25 @@ from django.views.generic import (
 
 from .models import Product, Category
 from .forms import ProductModelForm
-
 # Create your views here.
 
 # Falta validar el formulario
+
+def product_search(request):
+
+    try:
+        search_data = request.GET.get('search')
+        print(search_data)
+    except:
+        search_data = None
+    
+    if search_data:
+        products = Product.objects.filter(title__icontains=search_data)
+        context = {"products": products, "search_data": search_data}
+    else:
+        context = {}
+
+    return render(request, "product_search.html", context)
 
 def product_inventory(request, id):
 
@@ -127,7 +142,7 @@ def product_list(request):
 
     # si el stock de un producto es 0, se debe desactivar
     for product in products:
-        if product.stock == 0:
+        if product.stock <= 0:
             product.stock_active = False
         else:
             product.stock_active = True

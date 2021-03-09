@@ -9,4 +9,5 @@ urlpatterns = [
     path('googlepay/',views.googlepay_API, name = 'googlepayAPI'),
     path('pay/',views.paypal_API, name = 'paypalAPI'),
     path("khipuAPI/", views.khipu_API, name="khipuAPI"),
+    path("shipping/", views.shipping_data, name="shipping")
 ]

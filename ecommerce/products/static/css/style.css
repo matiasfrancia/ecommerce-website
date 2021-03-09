@@ -21,6 +21,7 @@
     --nav-buttons-color: white;
     --logo-font: 'Poppins', sans-serif;
     --nav-font: 'Poppins', sans-serif;
+    --search-button-border-color: black;
 
     /* Forms */
 
@@ -190,6 +191,11 @@ nav {
     font-family: var(--nav-font);
 }
 
+.actions {
+    display: flex;
+    align-items: center;
+}
+
 .actions a {
     padding-left: 10px;
     padding-right: 10px;
@@ -203,6 +209,41 @@ nav {
 
 .fas {
     color: var(--nav-buttons-color);
+}
+
+.search-form {
+    display: flex;
+    width: fit-content;
+    padding-right: 10px;
+}
+
+.search-form input[type=text] {
+    padding: 0 12px;
+    border: 1px solid var(--search-button-border-color);
+    border-radius: 4px;
+    resize: vertical;
+    height: 2em;
+    margin: 0;
+}
+
+form button.search-button {
+    width: fit-content;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    padding: 5px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0;
+    margin-left: 3px;
+}
+
+form button.search-button:hover {
+    background-color: var(--button-text-color);
+    color: var(--button-background-color);
+}
+
+form button.search-button i {
+    color: unset;
 }
 
 .burger {
