@@ -35,6 +35,3 @@ class RegisterForm(UserCreationForm):
         labels = {
             "username": "Nombre de usuario",
         }
-        errors = {
-            
-        }

@@ -4,8 +4,106 @@
     margin: auto;
 }
 
-@media screen and (max-width: 720px) {
+hr {
+    width: 100%;
+    border-bottom: 1px solid black;
+    margin: 2rem 0;
+}
+
+.stock-text {
+    margin-top: -1.5rem;
+    margin-bottom: 3rem;
+}
+
+.movements-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0 0 2.5rem 0;
+    font-family: var(--page-title-font);
+}
+
+.stock-wrapper {
+    margin-bottom: 2.5rem;
+}
+
+.movement-wrapper{
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    padding: 7px 15px;
+    box-sizing: border-box;
+    border-top: 1px solid rgb(167, 167, 167);
+    border-left: 1px solid rgb(167, 167, 167);
+    border-right: 1px solid rgb(167, 167, 167);
+}
+
+.movement-wrapper:last-of-type {
+    border-bottom: 1px solid rgb(167, 167, 167);
+}
+
+.movement-wrapper > div{
+    padding-left: .5em;
+}
+
+.movement-wrapper > div{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.new-movement-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+.label-input {
+    width: 30%;
+}
+
+.mov-type{
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+button.delete-movement {
+    background: var(--button-red-color);
+}
+
+.new-movement-form {
+    margin-bottom: 3rem;
+}
+
+@media screen and (max-width: 1020px) {
+
     .content-wrapper {
         width: 80%;
+    }
+
+    .new-movement-form {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 850px) {
+
+    .stock-wrapper{
+        grid-template-columns: 1fr;
+    }
+
+    .new-movement-data {
+        display: unset;
+    }
+
+    .label-input {
+        width: 100%;
+    }
+
+    .side-by-side{
+        display: block;
+    }
+
+    .side-by-side button{
+        width: 100%;
     }
 }

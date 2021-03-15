@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/product_categories.css'  %}">
+{% endblock %}
+
+{% block content%}
+
+    {% if user.is_superuser %}
+        <p class="page-title">Renombrar categoría: {{category.name}}</p>
+
+        <form method="post" action=".">{% csrf_token %}
+
+                <p>Nuevo nombre de la categoría:</p>
+                <input type="text" name="newName">
+                </br></br>
+                <button type="submit" name="save" value="save">Guardar</button>
+        </form>
+
+    {% else %}
+
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
+
+{% endblock %}

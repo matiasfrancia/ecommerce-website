@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/product_categories.css'  %}">
+{% endblock %}
+
+{% block content%}
+
+    {% if user.is_superuser %}
+        <p class="page-title">Renombrar categoría: {{category.name}}</p>
+
+        <form method="post" action=".">{% csrf_token %}
+
+                <p>¿Está seguro de querer eliminar la categoría: {{category.name}}?</p>
+                <p>Se eliminarán a su vez todos los productos que pertenecen a esa categoría.</p>
+                <button type="submit" name="delete" value="delete">Borrar</button>
+        </form>
+
+    {% else %}
+
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
+
+{% endblock %}

@@ -3,6 +3,13 @@ from django.urls import reverse
 import datetime
 
 # Create your models here.
+
+class CategoryFilter(models.Model):
+    name = models.CharField(max_length=120)
+
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
     title = models.CharField(max_length = 120)
     description = models.TextField()
@@ -11,6 +18,7 @@ class Product(models.Model):
     active = models.BooleanField(default = True)
     stock = models.IntegerField(default = 0)
     stock_active = models.BooleanField(default = False)
+    category_filter = models.ForeignKey(CategoryFilter, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse("products:product-detail", kwargs={"id": self.id})

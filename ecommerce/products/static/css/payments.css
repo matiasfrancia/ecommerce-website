@@ -1,32 +1,64 @@
-
-.payments-container {
+.payment-container {
     width: 60%;
     margin: auto;
-    margin-bottom: rem;
-}
-
-.payment-container {
-    width: 100%;
     border: 1px solid black;
-    margin-bottom: 1rem;
-}
-
-.payment {
-    padding: 1rem 1rem;
-    border-bottom: 1px solid black;
+    margin-bottom: 3rem;
+    display: grid;
+    grid-template: "id          productos" 1em
+                   "nombre      productos" 4em
+                   "email       productos" 1fr
+                   "monto       monto    " 2em
+                   "reembolso   reembolso" 2em/
+                   1fr          1fr;
+    gap: 1em;
+    padding: 1em;
+    box-sizing: border-box;
 }
 
 .id {
+    grid-area: id;
+    color: grey;
 }
 
 .name {
-    
+    grid-area: nombre;
+    font-size: 1.3em;
 }
 
 .email {
-
+    grid-area: email;
 }
 
 .amount {
     border-bottom: none;
+    grid-area: monto;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.list {
+    grid-area: productos;
+}
+
+.refound{
+    grid-area: reembolso;
+    background: red;
+    text-align: center;
+    color: white;
+    line-height: 2em;
+}
+
+@media only screen and (max-width: 600px){
+    .payment-container {
+        width: 90%;
+        grid-template: "id        " 1em
+                        "nombre   " 4em
+                        "email    " 2em
+                        "productos" 1fr
+                        "monto    " 3em
+                        "reembolso" 2em/
+                        1fr;
+        padding: .5em;
+    }
+    
 }

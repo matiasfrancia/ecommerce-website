@@ -23,7 +23,7 @@
                         <p>{{ object.description|linebreaksbr }}</p>
                         
                         {% if object.category_set.all %}
-                            <p class="subtitle">Categorias:</p>
+                            <p class="subtitle">Características:</p>
                         {% endif %}
                         
                         {% for categ in object.category_set.all %}

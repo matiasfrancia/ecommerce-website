@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet"  href="{%  static  'css/forms.css'  %}">
+    <link rel="stylesheet"  href="{%  static  'css/product_categories.css'  %}">
+{% endblock %}
+
+{% block content%}
+
+    {% if user.is_superuser %}
+        <p class="page-title">Categorías productos</p>
+
+        <form method="post" action=".">{% csrf_token %}
+
+                <ul>
+                    {% for categ in categories.all %}
+
+                        <li><input type="checkbox" name="category_filter{{categ.id}}" value="clicked">{{categ.name}}</li>
+
+                    {% endfor %}
+                </ul>
+
+                <p>Nombre categoría:</p>
+                <input type="text" name="newName">
+                </br></br>
+                <button type="submit" name="newCateg" value="newCateg">Agregar categoría</button>
+                <button type="submit" name="delCateg" value="delCateg">Eliminar Categoria(s)</button>
+                <button type="submit" name="renameCateg" value="renameCateg">Renombrar Categoria(s)</button>
+        </form>
+
+    {% else %}
+
+        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
+    
+    {% endif %}
+
+{% endblock %}

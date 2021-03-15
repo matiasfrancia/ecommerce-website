@@ -9,17 +9,80 @@ from django.views.generic import (
     View,
 )
 
-from .models import Product, Category
+from .models import Product, Category, CategoryFilter
 from .forms import ProductModelForm
+import datetime
+
 # Create your views here.
 
 # Falta validar el formulario
+
+def delete_category_filter(request, id):
+
+    category = CategoryFilter.objects.get(id=id)
+
+    if request.method == "POST":
+        if request.POST.get('delete'):
+            category.delete()
+            return redirect("/products/categories/")
+
+    return render(request, "delete_category_filter.html", {"category": category})
+
+def rename_category_filter(request, id):
+
+    category = CategoryFilter.objects.get(id=id)
+
+    if request.method == "POST":
+        
+        if request.POST.get('save'):
+            category.name = request.POST.get('newName')
+            category.save()
+            return redirect("/products/categories/")
+
+    return render(request, "rename_category_filter.html", {"category": category})
+
+def category_filters(request):
+
+    #TODO: permitir que sólo se pueda seleccionar una categoría para modificar y/o eliminar
+
+    categories = CategoryFilter.objects.all()
+    categ_rename = None
+
+    if request.method == 'POST':
+
+        newCateg = request.POST.get('newCateg')
+        delCateg = request.POST.get('delCateg')
+        renameCateg = request.POST.get('renameCateg')
+        newName = request.POST.get('newName')
+        newValue = request.POST.get('newValue')
+
+        print(request.POST)
+
+        if newCateg and newName:
+            categories.create(name = newName)
+
+        if delCateg:
+            for elem in request.POST:
+                if 'category_filter' in elem:
+                    #TODO: crear función para eliminar elementos de la base de datos
+                    id_del = int(elem.replace('category_filter', ''))
+                    return redirect('/products/categories/%i/delete/' % id_del)
+
+        if renameCateg:
+            for elem in request.POST:
+                if 'category_filter' in elem:
+                    id_rename = int(elem.replace('category_filter', ''))
+                    categ_rename = categories.get(id=id_rename)
+                    return redirect('/products/categories/%i/rename/' % id_rename)
+
+    context = {"categories": categories, "categ_rename": categ_rename}
+
+    return render(request, "category_filters.html", context)
 
 def product_search(request):
 
     try:
         search_data = request.GET.get('search')
-        print(search_data)
     except:
         search_data = None
     
@@ -33,7 +96,6 @@ def product_search(request):
 
 def product_inventory(request, id):
 
-    print(request.POST)
     product = Product.objects.get(id=id)
 
     error = """"""
@@ -95,9 +157,11 @@ def product_inventory(request, id):
                     product.save()
 
     movement_list = product.movement_set.order_by('date')
+
+    date = datetime.date.today()
                     
     return render(request, "product_inventory.html", 
-        {"p": product, "movement_list": movement_list, "error": error})
+        {"p": product, "movement_list": movement_list, "error": error, "date": date})
 
 def product_categories(request, id):
 
@@ -112,6 +176,7 @@ def product_categories(request, id):
 
         if newCateg and newName and newValue:
             product.category_set.create(name = newName, value = newValue)
+            return redirect('/products/%i/categories' %id)
 
         if delCateg:
             for elem in request.POST:
@@ -119,6 +184,7 @@ def product_categories(request, id):
                     id_del = int(elem.replace('category', ''))
                     categ_del = product.category_set.get(id=id_del)
                     categ_del.delete()
+            return redirect('/products/%i/categories' %id)
 
         if request.POST.get('save'):
             return redirect("/products/%i" %id)
@@ -139,6 +205,7 @@ class ProductCreateView(CreateView):
 def product_list(request):
 
     products = Product.objects.all()
+    selected = "default"
 
     # si el stock de un producto es 0, se debe desactivar
     for product in products:
@@ -147,8 +214,25 @@ def product_list(request):
         else:
             product.stock_active = True
         product.save()
+    
+    # filtramos los productos a través de su categoría
+    categories = CategoryFilter.objects.all()
+    
+    if request.method == "POST":
+        categ_name = request.POST.get('categories')
+        selected = categ_name
+        
+        if categ_name != 'default':
+            for categ in categories:
+                if categ.name == categ_name:
+                    products = categ.product_set.all()
 
-    context = {"products": products}
+    context = {"products": products, "categories": categories, "selected": selected}
+
+    # si la cantidad de productos en la lista es 1 manda una señal al template
+    if len(products) <= 2:
+        one_product = True
+        context["one_product"] = one_product
 
     return render(request, "product_list.html", context)
 
@@ -170,7 +254,6 @@ class ProductUpdateView(UpdateView):
         return get_object_or_404(Product, id=idToCreate)
 
     def form_valid(self, form):
-        print(form.cleaned_data)
         return super().form_valid(form)
 
     def get_success_url(self):

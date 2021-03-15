@@ -3,11 +3,14 @@ nav .fas {
     color: var(--nav-buttons-color);
 }
 
+.filters {
+    margin: 0.5rem 0 1.5rem 0;
+}
+
 .gallery{
     width: 60%;
     margin: auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
     gap: 3rem;
     margin-bottom: 2.5rem;
 }

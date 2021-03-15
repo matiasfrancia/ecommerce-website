@@ -14,12 +14,7 @@ button[type=submit].login-button {
     margin:auto;
 }
 
-button[type=submit].create-product-button {
-    width: fit-content;
-    display: block;
-}
-
-button[type=submit].payments-button {
+button[type=submit].create-product-button, button[type=submit].payments-button, button[type=submit].categories-button {
     width: fit-content;
     display: block;
 }
@@ -48,7 +43,6 @@ button[type=submit].inventory-button:hover {
     .less-margin-top {
         margin-top: -3em;
     }
-
 }
 
 @media screen and (max-width: 720px) {
@@ -57,7 +51,8 @@ button[type=submit].inventory-button:hover {
         flex-direction: column;
     }
 
-    button[type=submit].login-button, button[type=submit].create-product-button, button[type=submit].payments-button {
+    button[type=submit].login-button, button[type=submit].create-product-button, 
+    button[type=submit].payments-button, button[type=submit].categories-button {
         width: 100%;
     }
 }

@@ -23,10 +23,15 @@
                     {% endfor %}
                 </ul>
 
-                <p>Nombre categoría:</p>
-                <input type="text" name="newName">
-                <p>Valor categoría:</p>
-                <input type="text" name="newValue">
+                <p class="helptext-categ">En esta sección puede agregar información de su producto, de la forma:</p>
+                <p class="helptext-categ">"Texto deseado": "Texto deseado"</p><br>
+                <p class="helptext-categ">Ejemplo:<br>Formato: 1 kg<br>Envase: bolsa plástica</p><br>
+
+                <p>Característica:</p>
+                <div class="side-by-side">
+                    <input type="text" name="newName">:
+                    <input type="text" name="newValue">
+                </div>
                 </br></br>
                 <button type="submit" name="newCateg" value="newCateg">Agregar categoría</button>
                 <button type="submit" name="delCateg" value="delCateg">Eliminar Categoria(s)</button>

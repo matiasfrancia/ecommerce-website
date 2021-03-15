@@ -15,9 +15,6 @@ import datetime
 # ========================================================== Cart ==========================================================
 def cart_view(request):
 
-    # elimina el carro de compras en caso de que el pago esté hecho y actualiza el estado del pago en la base de datos
-    # TODO: hacer una función async que cargue el template sólo si se completo la petición
-
     # obtenemos las cookies con el id
 
     items = []
@@ -31,8 +28,6 @@ def cart_view(request):
 
             # comprobamos si el pago fue realizado
             payment = Payment.objects.get(payment_id=payment_id)
-
-            print("Payment status: ", payment.status)
 
             if payment.status == 'done':
                 payment_ready = True
@@ -170,7 +165,6 @@ def khipu_API(request):
         
         if 'shipping_data' in request.session:
             info = request.session['shipping_data']
-            print(info)
             payment = Payment.objects.get(payment_id=payment_id)
             payment.direction = info['direction']
             payment.city = info['city']
@@ -184,8 +178,6 @@ def khipu_API(request):
     return render(request, 'khipu.html', {'form_payment_khipu': form_payment_khipu, 'payment_id': payment_id})
 
 def shipping_data(request):
-
-    print(Payment.objects.get(payment_id='xgmzvlsfu4sm').direction)
 
     if 'shipping_data' in request.session:
         info = request.session['shipping_data']

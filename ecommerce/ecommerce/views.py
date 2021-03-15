@@ -20,7 +20,6 @@ def contact(request):
             message = form.cleaned_data['mensaje']
             email = form.cleaned_data['email']
             
-            print(subject,message,email)
             send_mail(
                 subject,
                 message+"\nFrom: "+email,

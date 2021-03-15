@@ -12,10 +12,35 @@
 
 <p class="page-title">Contáctanos!</p>
 
-    <form action="." method="POST">
+    <form action="." method="post">
+        {{ form.non_field_errors }}
+        <div class="side-by-side">
+            <div class="field-container">
+                {{ form.asunto.errors }}
+                {{ form.asunto.label_tag }}
+                {{ form.asunto }}
+                <span class="helptext">{{ form.asunto.help_text }}</span>
+            </div>
+            <div class="field-container">
+                {{ form.email.errors }}
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                <span class="helptext">{{ form.email.help_text }}</span>
+            </div>
+        </div>
+        <div class="field-container">
+            {{ form.mensaje.errors }}
+            {{ form.mensaje.label_tag }}
+            {{ form.mensaje }}
+            <span class="helptext">{{ form.mensaje.help_text }}</span>
+        </div>
+        <input type="submit" value="Send">
+    </form>
+
+    {% comment %} <form action="." method="POST">
         {% csrf_token %}
         {{form.as_p}}
         <input type="submit" value="Send">
-    </form>
+    </form> {% endcomment %}
 
 {% endblock %}

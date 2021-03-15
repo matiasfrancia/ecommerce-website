@@ -1,19 +1,9 @@
 
 .wrapper {
+    width: 60%;
     display: flex;
     justify-content: center;
-    padding-bottom: 40px;
-}
-
-.column-wrapper {
-    width:60%;
-    display: grid;
-    grid-template: 
-    "texto1 foto1" auto
-    "foto2 texto2" auto/
-    50% 50%;
-    row-gap: 5rem;
-    column-gap: 3rem;
+    margin: auto;
 }
 
 .subtitle {
@@ -21,35 +11,14 @@
 }
 
 .p1, .p2 {
-    grid-area: texto;
-    width: 100%;
     text-align: justify;
-}
-
-.p1 {
-    grid-area: texto1;
-}
-
-.p2 {
-    grid-area: texto2;
+    padding: 5em 0;
 }
 
 .img1, .img2 {
     width: 100%;
-}
-
-.img1 img, .img2 img {
-    grid-area: foto1;
-    display: block;
-    width: 100%;
-}
-
-.img1 {
-    grid-area: foto1;
-}
-
-.img2 {
-    grid-area: foto2;
+    height: 40vh;
+    object-fit: cover;
 }
 
 @media screen and (max-width: 720px) {
@@ -57,15 +26,13 @@
     .title {
         margin: 30px 0 1em 0;
     }
-    
-    .column-wrapper {
-        grid-template: 
-        "texto1"
-        "foto1"
-        "texto2"
-        "foto2";
-        row-gap: 2.5em;
-        width: 80%;
+
+    .p1, .p2 {
+        padding: 3em 1em;
+    }
+
+    .img1, .img2 {
+        display: none;
     }
 
 }

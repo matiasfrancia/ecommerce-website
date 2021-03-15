@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
-from products.models import Product
+from products.models import Product, CategoryFilter
 from khipu.models import Payment
 from khipu.views import get_payment_by_id, refound
 from django.db.models import Q
 import datetime
 import json
 from django.urls import reverse
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
 
 # Create your views here.
 def register(request):
@@ -14,8 +16,11 @@ def register(request):
     form = RegisterForm(request.POST or None)
 
     if form.is_valid():
-        form.save()
-
+        new_user = form.save()
+        new_user = authenticate(username=form.cleaned_data['username'],
+                                password=form.cleaned_data['password1'],
+                                )
+        login(request, new_user)
         return redirect('/home/')
 
     context = {"form": form}
@@ -27,6 +32,7 @@ def register(request):
 def profile(request):
 
     products = Product.objects.all()
+    selected = "default"
 
     context = {}
 
@@ -38,8 +44,6 @@ def profile(request):
             else:
                 product.stock_active = True
             product.save()
-
-        context = {"products": products}
     
     else:
         payments = request.user.payment_set.all()
@@ -60,12 +64,35 @@ def profile(request):
 
             payments_parsed.append(pay_dict)
 
-        context = {"products": products, "payments": payments_parsed}
+        context = {"payments": payments_parsed}
+
+    # filtramos los productos a través de su categoría
+    categories = CategoryFilter.objects.all()
+    
+    if request.method == "POST":
+        categ_name = request.POST.get('categories')
+        selected = categ_name
+        
+        if categ_name != 'default':
+            for categ in categories:
+                if categ.name == categ_name:
+                    products = categ.product_set.all()
+
+    # agregamos los productos al context para pasárselos al template
+    context["products"] = products
+    context["categories"] = categories
+
+    # si la cantidad de productos en la lista es 1 manda una señal al template
+    if len(products) <= 2:
+        one_product = True
+        context["one_product"] = one_product
 
     return render(request, "profile.html", context)
 
 def payments(request):
+    return render(request, "payments.html")
 
+def payment_data(request):
     # Actualizamos el estado de las compras que no están terminadas (en la db)
 
     payments_update = Payment.objects.exclude(status = 'done')
@@ -78,7 +105,6 @@ def payments(request):
 
             # descontar del stock las nuevas compras realizadas
             negatives_stocks = enter_movements_payment('salida', payment)
-            """ print("ID: ", payment.payment_id, "negatives_stocks: ", negatives_stocks) """
             
             # agregamos negatives_stocks a las variables de sesión si != []
             if negatives_stocks != []:
@@ -124,11 +150,8 @@ def payments(request):
         }
 
         payments_parsed.append(pay_dict)
-
-    context = {'payments': payments_parsed}
-
-    return render(request, "payments.html", context)
-                            
+    
+    return JsonResponse(payments_parsed, safe=False)
 
 # función que retorna true si el pago debe ser eliminado, false en caso contrario
 def delete_pending_payment(payment):
@@ -159,14 +182,14 @@ def refound_view(request, id):
 
             negatives_stocks = enter_movements_payment('entrada', payment)
 
-            # se elimina negatives_stocks de las variables de sesión 
+            # se elimina negatives_stocks de las variables de sesión
             # (también se debería hacer en caso de que se arregle el problema de stock)
             if payment.payment_id in request.session:
                 del request.session[payment.payment_id]
 
             return redirect(reverse('payments'))
 
-    return render(request, "refound.html",{"id":id}) 
+    return render(request, "refound.html",{"id":id})
 
 
 # ingresa los movimientos correspondientes a un carro de compras (puede ser entrada o salida)
@@ -205,5 +228,4 @@ def enter_movements_payment(movement_type, payment):
         return negatives_stocks
 
     except:
-        print("Hubo algún error en la operación")
         return []

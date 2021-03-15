@@ -7,6 +7,15 @@
     <link rel="stylesheet"  href="{%  static  'css/products_gallery.css'  %}">
     <link rel="stylesheet"  href="{%  static  'css/profile.css'  %}">
     <link rel="stylesheet"  href="{%  static  'css/payments.css' %}">
+    <style>
+        .payment-container {
+            grid-template: "id          productos" 1em
+                   "nombre      productos" 6em
+                   "email       productos" 1fr
+                   "monto       monto    " 2em/
+                   1fr          1fr;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -21,10 +30,41 @@
 
             <div class="wrapper-button">
                 <a href="/products/create/"><button type="submit" class="create-product-button">Crear nuevo producto</button></a>
-                <a href="/payments/"><button type="submit" class="payments-button">Historial de pagos</button></a>
+                    <a href="/payments/"><button type="submit" class="payments-button">Historial de pagos</button></a>
+                    <a href="/products/categories/"><button type="submit" class="categories-button">Categorías</button></a>
             </div>
 
             <p class="page-title less-margin-top">Productos</p>
+
+            <div class="filters">
+                <form action="." method="POST">{% csrf_token %}
+                    <p class="filter-title">Filtros</p>
+                    <select name="categories" value="categories" class="categories" onchange="submit()">
+                        <option name="default" value="default">Todos los productos</option>
+                        {% for category in categories %}
+                            {% if selected == category.name %}
+                                <option name="{{category.name}}" value="{{category.name}}" selected>{{category.name}}</option>
+                            {% else %}
+                                <option name="{{category.name}}" value="{{category.name}}">{{category.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            {% if not one_product %}
+                <style>
+                    .gallery {
+                        grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+                    }
+                </style>
+            {% else %}
+                <style>
+                    .gallery {
+                        grid-template-columns: repeat(auto-fit,minmax(200px,280px));
+                    }
+                </style>
+            {% endif %}
 
             <div class="gallery">
                 {% for product in products %}
@@ -66,13 +106,13 @@
             
                 <div class="payment-container">
                 <p class="payment id">Id pago: {{payment.payment_id}}</p>
-                <p class="payment name">Nombre cliente: {{payment.payer_name}}</p>
-                <p class="payment email">Email cliente: {{payment.payer_email}}</p>
+                <p class="payment name">Nombre cliente: <br> {{payment.payer_name}}</p>
+                <p class="payment email">Email cliente: <br> {{payment.payer_email}}</p>
                 {% if payment.cart_products %}
                     <p class="payment list">
-                        Productos comprados: 
+                        Productos comprados: <br>
                         {% for item in payment.cart_products %}
-                            {{item.product_id}} - {{item.product_title}}: {{item.product_quantity}}
+                            {{item.product_id}} - {{item.product_title}}: {{item.product_quantity}} <br>
                         {% endfor %}
                     </p>
                 {% endif %}

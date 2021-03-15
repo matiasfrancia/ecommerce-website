@@ -12,7 +12,7 @@
 
     {% if user.is_superuser %}
     
-        <p class="page-title">Inventario {{p.title}}</p>
+        <p class="page-title">Inventario: {{p.title}}</p>
 
         {% if error %}
             <div class="content-wrapper">
@@ -20,49 +20,55 @@
             </div>
         {% endif %}
 
-        <form method="post" action=".">{% csrf_token %}
+        <div class="content-wrapper">
+            <p class="movements-title">Stock - {{p.stock}}</p>
+            <hr>
+            <p class="movements-title">Movimientos</p>
+        </div>
+
+        <form class="new-movement-form" method="post" action=".">{% csrf_token %}
 
             <div class="stock-wrapper">
                 {% for mov in movement_list %}
 
                     <div class="movement-wrapper">
-                    
                         <input type="checkbox" name="movement_id{{mov.id}}" value="clicked">
-                        <div class="mov-type">
-                            {{mov.mov_data}}
+                        <div>
+                            <div class="mov-type">{{mov.mov_data}}</div>
+                            <div class="mov-date">{{mov.date}}</div>
+                            <div class="mov-quantity">{{mov.quantity}}</div>
                         </div>
-                        <div class="mov-date">
-                            {{mov.date}}
-                        </div>
-                        <div class="mov-quantity">
-                            {{mov.quantity}}
-                        </div>
-
                     </div>
 
                 {% endfor %}
             </div>
+            
+            <p class="movements-title">Agregar nuevo movimiento</p>
 
-            <p>Tipo de movimiento:</p>
-            <select name="newMovData">
-                <option value="entrada">Entrada</option>
-                <option value="salida">Salida</option>
-            </select>
-
-            <p>Fecha del movimiento:</p>
-            <input type="date" name="newDate">
-
-            <p>Cantidad de producto:</p>
-            <input type="number" name="newQuantity">
+            <div class="new-movement-data">
+                <div class="label-input">
+                    <p>Tipo de movimiento:</p>
+                    <select name="newMovData">
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                    </select>
+                </div>
+                <div class="label-input">
+                    <p>Fecha del movimiento:</p>
+                    <input type="date" name="newDate" value="{{date| date:"Y-m-d"}}">
+                </div>
+                <div class="label-input">
+                    <p>Cantidad de producto:</p>
+                    <input type="number" name="newQuantity">
+                </div>
+            </div>
 
             </br></br>
-            <button type="submit" name="newMovement" value="newMovement">Agregar movimiento</button>
-            <button type="submit" name="delMovement" value="delMovement">Eliminar movimiento(s)</button>
+            <div class="side-by-side">
+                <button type="submit" name="newMovement" value="newMovement">Agregar movimiento</button>
+                <button type="submit" class="delete-movement" name="delMovement" value="delMovement">Eliminar movimiento(s)</button>
+            </div>
         </form>
-
-        <div class="content-wrapper">
-            {{p.stock}}
-        </div>
 
     {% else %}
 
