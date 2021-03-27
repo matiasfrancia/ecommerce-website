@@ -9,7 +9,7 @@ from django.views.generic import (
     View,
 )
 
-from .models import Product, Category, CategoryFilter
+from .models import Product, Category, CategoryFilter, History
 from .forms import ProductModelForm
 import datetime
 
@@ -89,6 +89,10 @@ def product_search(request):
     if search_data:
         products = Product.objects.filter(title__icontains=search_data)
         context = {"products": products, "search_data": search_data}
+
+        # si la cantidad de productos en la lista es 1 manda una señal al template
+        if len(products) <= 2:
+            context["one_product"] = True
     else:
         context = {}
 
@@ -243,6 +247,28 @@ class ProductDetailView(DetailView):
     def get_object(self):
         idToCreate = self.kwargs.get("id")
         return get_object_or_404(Product, id=idToCreate)
+
+def product_update(request, id):
+
+    instance = get_object_or_404(Product, id=id)
+
+    form = ProductModelForm(request.POST or None, instance=instance)
+
+    product_price = instance.price
+
+    if form.is_valid():
+        product = form.save()
+        
+        # si el precio al actualizar cambia creamos una instancia de ProductHistory
+        if product.price != product_price:
+            product.history_set.create(price = product.price, date = datetime.date.today())
+            print(product.history_set.all())
+
+        return redirect("/profile/")
+
+    context = {"form": form}
+
+    return render(request, "product_update.html", context)
 
 class ProductUpdateView(UpdateView):
     template_name = "product_update.html"

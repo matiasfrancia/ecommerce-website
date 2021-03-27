@@ -30,6 +30,14 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+class History(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date = models.DateField()
+    price = models.IntegerField()
+
+    def __str__(self):
+        return self.product.title + ": " + str(self.date) + " - " + str(self.price) 
+
 class Category(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)

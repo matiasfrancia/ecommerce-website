@@ -89,6 +89,37 @@ def profile(request):
 
     return render(request, "profile.html", context)
 
+# página a la cual redireccionaremos al usuario luego de haber completado el pago
+def payment_detail(request):
+
+    # TODO: debemos enviar una señal a la view del carro de compras avisando que el pago ya está confirmado
+
+    try:
+        payment_id = request.COOKIES.get('pi')
+        if payment_id != '':
+            get_payment_by_id(payment_id)
+
+            # comprobamos si el pago fue realizado
+            payment = Payment.objects.get(payment_id=payment_id)
+
+            if payment.status == 'done':
+                if 'shipping_data' in request.session:
+                    del request.session['shipping_data']
+                    
+                # descontar del stock las nuevas compras realizadas
+                negatives_stocks = enter_movements_payment('salida', payment)
+                
+                # agregamos negatives_stocks a las variables de sesión si != []
+                if negatives_stocks != []:
+                    request.session[id] = {'negatives_stocks': negatives_stocks}
+
+    except:
+        print("Except")
+
+    context = {}
+    
+    return render(request, "payment_detail.html", context)
+
 def payments(request):
     return render(request, "payments.html")
 

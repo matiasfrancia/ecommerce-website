@@ -1,15 +1,23 @@
 {% extends 'base.html' %}
 
-{% block title %}Compras{% endblock %}
+{% block title %}Cart{% endblock %}
 
 {% block styles %}
+
+    <!-- Styles -->
+
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/payments.css' %}">
+    <link rel="stylesheet" href="{% static 'css/payment_detail.css' %}">
     <link rel="stylesheet" href="{% static 'css/spinner.css' %}">
+
+    <!-- Scripts -->
+
+    <script src="{% static 'js/cart.js' %}"></script>
+
 {% endblock %}
 
-{% block content%}
-
+{% block content %}
+        
     {% if user.is_superuser %}
         <p class="page-title">Pagos</p>
 
@@ -25,4 +33,5 @@
         <p class="permission-denied">No tienes permiso para realizar esta acción</p>
     
     {% endif %}
+
 {% endblock %}

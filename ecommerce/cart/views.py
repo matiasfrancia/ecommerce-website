@@ -50,8 +50,6 @@ def cart_view(request):
     
     return render(request, "cart.html", context)
 
-    # y acá se debe eliminar el id de las cookies, para que no borre los productos del carro cuando se quiera comprar algo más
-
 def get_cart(request, to_json = False):
     try:
         cart = json.loads(request.COOKIES['cart'])
@@ -150,7 +148,7 @@ def khipu_API(request):
             'subject': 'Esto es un pago de ' + str(request.user),
             'currency': 'CLP',
             'amount': str(cart_total) + '.0000',
-            'return_url': request.build_absolute_uri(reverse('cart:cart_view')),
+            'return_url': request.build_absolute_uri(reverse('payment-detail')),
             'custom': json_custom,
             'expires_date': expires_date,
         })
