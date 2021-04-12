@@ -13,7 +13,7 @@
 
 {% block content %}
 
-    <p class="page-title">Productos</p>
+    <p class="page-title nav-margin">Productos</p>
 
     <div class="filters">
         <form action="." method="POST">{% csrf_token %}
@@ -58,7 +58,9 @@
                     <p class="price">${{ product.price|to_clp }}</p>
 
                     <a href="{{product.get_absolute_url}}"><button type="submit">Ver más</button></a>
-                    <button type="submit" class="background-red" onclick="addCookieItem('{{product.id}}', {{product.stock}})"><i class="fas fa-shopping-cart"></i></button>
+                    <form method="post" class="cart-form">{% csrf_token %}
+                            <button type="submit" name="addOne" value="addOne{{product.id}}" class="background-red">+1</button>
+                    </form>
                 </div>
 
             {% endif %}

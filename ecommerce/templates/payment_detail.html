@@ -4,34 +4,28 @@
 
 {% block styles %}
 
+    {% load my_filters %}
+
     <!-- Styles -->
 
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/payment_detail.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'css/payment_detail.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/spinner.css' %}">
-
-    <!-- Scripts -->
-
-    <script src="{% static 'js/cart.js' %}"></script>
-
+    
 {% endblock %}
 
 {% block content %}
-        
-    {% if user.is_superuser %}
-        <p class="page-title">Pagos</p>
 
-        <div id="loading">
-            <div class="spinner"></div>
+    <p class="page-title">Detalle compra</p>
+
+    <div class="payments-container" id="payments">
+        <div class="payment-container">
+            <p class="id">Id pago: {{payment.payment_id}}</p>
+            <p class="name">Nombre cliente: <br>{{payment.payer_name}}</p>
+            <p class="email">Email cliente: <br>{{payment.payer_email}}</p>
+            <p class="products">{{payment.cart_products}}</p>
+            <p class="amount">Monto de compra: {{payment.amount | to_clp}}</p>
         </div>
-
-        <div class="payments-container" id="payments">
-        </div>
-        <script src="{% static 'js/payment_load.js' %}"></script>
-    {% else %}
-
-        <p class="permission-denied">No tienes permiso para realizar esta acción</p>
-    
-    {% endif %}
+    </div>
 
 {% endblock %}

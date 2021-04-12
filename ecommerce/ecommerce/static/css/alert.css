@@ -1,0 +1,36 @@
+.toast{
+    background: var(--button-red-color);
+    color: white;
+    padding: 1em 1em;
+    border-radius: .5em;
+    position: absolute;
+    bottom: 3rem;
+    right: 3rem;
+    text-align: center;
+    opacity: 1;
+    width: fit-content;
+    font-size: 18px;
+    max-width: 20rem;
+    word-wrap: break-word;
+    
+    animation-name: toast;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease;
+    animation-duration: 1s;
+    animation-delay: 2s;
+  }
+    
+  @keyframes toast{
+    to{
+      opacity: 0;
+      display: none;
+      z-index: -1;
+    }
+  }
+
+@media screen and (max-width: 720px) {
+    .toast {
+        right: 50%;
+        transform: translateX(50%);
+    }
+}

@@ -8,33 +8,35 @@
 
 {% block content %}
 
-        {% if object.active and object.stock_active or user.is_superuser %}
+        {% if product.active and product.stock_active or user.is_superuser %}
             <div class="product-container">
 
                 <div class="product-wrapper">
                     <div class="product-gallery">
-                        <img src="{{ object.image.url }}" alt="imagen de {{ object.title }}">
+                        <img src="{{ product.image.url }}" alt="imagen de {{ product.title }}">
                     </div>
 
                     <div class="product-info">
 
-                        <h2>{{ object.title }}</h2>
+                        <h2>{{ product.title }}</h2>
                         <p class="subtitle">Descripción:</p>
-                        <p>{{ object.description|linebreaksbr }}</p>
+                        <p>{{ product.description|linebreaksbr }}</p>
                         
-                        {% if object.category_set.all %}
+                        {% if product.category_set.all %}
                             <p class="subtitle">Características:</p>
                         {% endif %}
                         
-                        {% for categ in object.category_set.all %}
+                        {% for categ in product.category_set.all %}
                             <p><span class="categ-name">{{categ.name}}:</span>{{categ.value}}</p>
                         {% endfor %}
 
-                        <p><span>Precio:</span> ${{ object.price|to_clp }}</p>
+                        <p><span>Precio:</span> ${{ product.price|to_clp }}</p>
 
                         <div class="purchase-info">
-                            <input type="number" class="num{{object.id}}" min="0" max="{{object.stock}}" value="1">
-                            <button type="button" class="btn" onclick="addCookieItem('{{object.id}}', {{object.stock}})">Agregar al carro</button>
+                            <form method="post" class="cart-form">{% csrf_token %}
+                                <input type="number" name="quantity" class="num{{product.id}}" min="0" max="{{product.stock}}" value="1">
+                                <button type="submit" name="addMany" value="addMany{{product.id}}" class="btn">Añadir al carro</button>
+                            </form>
                         </div>
 
                     </div>

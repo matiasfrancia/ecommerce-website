@@ -1,80 +1,91 @@
 from django.shortcuts import render, reverse, redirect
 import json
 from products.models import Product
-from register.views import enter_movements_payment
-from google_currency import convert
+from payment.views import enter_movements_payment, payment_status_update_by_id, \
+                        save_payment_id, get_payment_id, delete_payment_id
+
+from . import api as cart_api
 
 from khipu.models import Payment
-from khipu.views import get_payment_by_id
 
-from .PayPalRequest import CreateOrder
 from django.http import JsonResponse
 from khipu.forms import KhipuCreatePaymentForm
 import datetime
 
 # ========================================================== Cart ==========================================================
+
 def cart_view(request):
 
     # obtenemos las cookies con el id
 
     items = []
     total_price = 0
-    payment_ready = False
 
     try:
-        payment_id = request.COOKIES.get('pi')
-        if payment_id != '':
-            get_payment_by_id(payment_id)
-
-            # comprobamos si el pago fue realizado
-            payment = Payment.objects.get(payment_id=payment_id)
-
-            if payment.status == 'done':
-                payment_ready = True
-                if 'shipping_data' in request.session:
-                    del request.session['shipping_data']
-                    
-                # descontar del stock las nuevas compras realizadas
-                negatives_stocks = enter_movements_payment('salida', payment)
-                
-                # agregamos negatives_stocks a las variables de sesión si != []
-                if negatives_stocks != []:
-                    request.session[id] = {'negatives_stocks': negatives_stocks}
+        payment_id = get_payment_id(request)
+        if payment_id != None:
+            payment_status_update_by_id(request, payment_id)
 
     except:
-        print("Except")
+        print("Hubo un error al actualizar el pago (view del carro de compras)")
 
-    items, total_price = get_cart(request)
+    # elimina producto del carrito
+    if request.method == "POST":
 
-    context = {"items":items, "total_price": total_price, "payment_ready": payment_ready}
+        print(request.POST)
+
+        for posted in request.POST:
+            if 'quantity' in posted:
+                product_id = int(posted.replace('quantity', ''))
+                new_quantity = int(request.POST[posted])
+
+                cart_api.set_quantity(request, product_id, new_quantity)
+
+        remove = request.POST.get('removeItem')
+
+        if remove:
+            id_product = int(remove.replace('removeItem', ''))
+            cart_api.delete_element(request, id_product)
+        
+        print(cart_api.get_cart(request))
+
+    items, total_price = get_parsed_cart(request)
+
+    context = {"items": items, "total_price": total_price}
     
     return render(request, "cart.html", context)
 
-def get_cart(request, to_json = False):
-    try:
-        cart = json.loads(request.COOKIES['cart'])
-    except:
-        cart = {"orden": []}
+# parsea la información del carrito
+def get_parsed_cart(request, to_json = False):
+
+    # envía una alerta en caso de que se exceda del stock máximo
+    send_alert = False
+
+    cart = cart_api.get_cart(request)
+    if cart == None:
+        cart = []
 
     items = []
     total_price = 0
 
-    for product_id in cart['orden']:
+    for product_id, quantity in cart:
 
         product = Product.objects.get(id=product_id)
-        quantity = abs(int(cart[product_id]['cantidad']))
 
         if quantity > product.stock:
             quantity = product.stock
 
-        if quantity == 0:
-            quantity = 1
+            # actualiza la cantidad del producto en el carrito según el stock que hay
+            cart_api.set_quantity(request, product_id, quantity)
+            send_alert = True
 
         if not to_json:
             item = {
                 "product": product,
                 "quantity": quantity,
                 "subtotal": quantity * product.price,
+                "send_alert": send_alert,
+                "alert_text": "El stock máximo de<br>" + product.title + " es: " + str(product.stock),
             }
         else:
             item = {
@@ -90,54 +101,35 @@ def get_cart(request, to_json = False):
 
     return (items,total_price)
 
-# ========================================================== PayPal ==========================================================
-
-def paypal(request):
-    return render(request, "paypal.html")
-
-def paypal_API(request):
-    if request.method == 'POST':
-        items,total_price = get_cart(request)
-        order = CreateOrder().create_order(total_price)
-        data = order.result.__dict__['_dict']
-        return JsonResponse(data)
-    else:
-        return JsonResponse({"details":"invalid request"})
-
-# ========================================================== GooglePay ==========================================================
-
-def googlepay_API(requset):
-    if request.method == 'POST':
-        items,total_price = get_cart(request)
-        return JsonResponse({"total":total_price})
-    else:
-        return JsonResponse({"details":"invalid request"})
-
-def convert_clp_to_usd(price):
-    string_price = convert('clp', 'usd', price)
-    json_price = json.loads(string_price)
-    return json_price
-
 # ========================================================== Khipu ==========================================================
+
+def get_expires_date(hours=12):
+
+    now = datetime.datetime.today()
+
+    expires_date = now + datetime.timedelta(hours=hours)
+    expires_date = expires_date.replace(microsecond=0).isoformat() + 'Z'
+
+    return expires_date
 
 def khipu_API(request):
 
     # creamos un pago únicamente si no hay uno ya en las cookies
-    payment_id = request.COOKIES.get('pi')
+    payment_id = get_payment_id(request)
 
-    if not payment_id:
+    if payment_id == None:
 
         # cart_products: lista item = [{'product', 'quantity', 'subtotal'}, ...]
-        cart_products, cart_total = get_cart(request, True)
+        cart_products, cart_total = get_parsed_cart(request, True)
 
         dicc_custom = {"cart_products": cart_products}
         json_custom = json.dumps(dicc_custom)
 
-        # Obtenemos la fecha de expiración
-        now = datetime.datetime.today()
+        print(dicc_custom)
+        print(json_custom)
 
-        expires_date = now + datetime.timedelta(hours=12)
-        expires_date = expires_date.replace(microsecond=0).isoformat() + 'Z'
+        # Obtenemos la fecha de expiración
+        expires_date = get_expires_date()
 
         # crea el fomulario para la conexión con khipu
         form_payment_khipu = KhipuCreatePaymentForm(**{'payment_id': payment_id})
@@ -148,19 +140,23 @@ def khipu_API(request):
             'subject': 'Esto es un pago de ' + str(request.user),
             'currency': 'CLP',
             'amount': str(cart_total) + '.0000',
-            'return_url': request.build_absolute_uri(reverse('payment-detail')),
+            'return_url': request.build_absolute_uri(reverse('payment:payment-detail')),
             'custom': json_custom,
             'expires_date': expires_date,
         })
         
+        
         # obtenemos el objeto del pago a través del id
         payment_id = form_payment_khipu.return_id()
+
+        save_payment_id(request, payment_id)
 
         # si el usuario está registrado, le adjudicamos el pago
         if request.user.is_authenticated:
             payment = Payment.objects.get(payment_id=payment_id)
             request.user.payment_set.add(payment)
         
+        # revisa si está la información de despacho en las variables de sesión y las guarda en Payment
         if 'shipping_data' in request.session:
             info = request.session['shipping_data']
             payment = Payment.objects.get(payment_id=payment_id)
@@ -172,28 +168,4 @@ def khipu_API(request):
     else:
         form_payment_khipu = KhipuCreatePaymentForm(**{'payment_id': payment_id})
 
-
     return render(request, 'khipu.html', {'form_payment_khipu': form_payment_khipu, 'payment_id': payment_id})
-
-def shipping_data(request):
-
-    if 'shipping_data' in request.session:
-        info = request.session['shipping_data']
-    else:
-        info = {"direction": "", "city": "", "cellphone": ""}
-
-    if request.method == "POST" and request.POST.get("save"):
-
-        direction = request.POST.get("direction")
-        city = request.POST.get("city")
-        cellphone = request.POST.get("cellphone")
-
-        if direction and city and cellphone:
-            info = {"direction": direction, "city": city, "cellphone": cellphone}
-
-            # guardamos la información en session variables para obtenerlas en otra vista
-            request.session['shipping_data'] = info
-
-            return redirect('/cart/khipuAPI/')
-
-    return render(request, 'shipping_data.html', {"info": info})

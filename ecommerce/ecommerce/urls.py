@@ -32,13 +32,10 @@ urlpatterns = [
     path("contact/", views.contact, name="contact"),
     path("aboutus/", views.about_us, name="about-us"),
     path("cart/", include('cart.urls')),
+    path('payments/', include('payment.urls')),
     path("register/", register_views.register, name="register"),
     path("", include("django.contrib.auth.urls")),
     path("profile/", register_views.profile, name="profile"),
-    path("payments/", register_views.payments, name="payments"),
-    path("payments/payments-json/", register_views.payment_data, name="payments-json"),
-    path("payments/detail/", register_views.payment_detail, name="payment-detail"),
-    path("refound/<id>", register_views.refound_view, name="refound"),
     re_path(r'^khipu/', include('khipu.urls')),
 ]
 

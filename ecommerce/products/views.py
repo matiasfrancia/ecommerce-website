@@ -11,6 +11,7 @@ from django.views.generic import (
 
 from .models import Product, Category, CategoryFilter, History
 from .forms import ProductModelForm
+from cart import api as cart_api
 import datetime
 
 # Create your views here.
@@ -56,8 +57,6 @@ def category_filters(request):
         newName = request.POST.get('newName')
         newValue = request.POST.get('newValue')
 
-        print(request.POST)
-
         if newCateg and newName:
             categories.create(name = newName)
 
@@ -85,6 +84,16 @@ def product_search(request):
         search_data = request.GET.get('search')
     except:
         search_data = None
+
+    if request.method == "POST":
+
+        add_one = request.POST.get('addOne')
+
+        if add_one:
+            id_product = int(add_one.replace('addOne', ''))
+            cart_api.add_quantity(request, id_product, 1)
+        
+        print(cart_api.get_cart(request))
     
     if search_data:
         products = Product.objects.filter(title__icontains=search_data)
@@ -117,13 +126,14 @@ def product_inventory(request, id):
             delta_quantity = abs(int(newQuantity))
 
             # sumamos la cantidad de stock del producto
-            if newMovData == 'entrada':
+            if newMovData == 'entrada' or newMovData == 'reembolso':
+
                 product.stock += delta_quantity
                 product.movement_set.create(mov_data = newMovData, date = newDate, quantity = delta_quantity)
                 product.save()
                 return redirect("/products/%i/inventory/" % id)
 
-            else:
+            elif newMovData == 'salida':
 
                 if product.stock - delta_quantity >= 0:
                     product.stock -= delta_quantity
@@ -147,7 +157,7 @@ def product_inventory(request, id):
                 if 'movement_id' in elem:
                     id_del = int(elem.replace('movement_id', ''))
                     move_del = product.movement_set.get(id=id_del)
-                    if move_del.mov_data == "entrada":
+                    if move_del.mov_data == "entrada" or move_del.mov_data == 'reembolso':
                         if product.stock - move_del.quantity >= 0:
                             product.stock -= move_del.quantity
                             move_del.delete()
@@ -218,7 +228,7 @@ def product_list(request):
         else:
             product.stock_active = True
         product.save()
-    
+
     # filtramos los productos a través de su categoría
     categories = CategoryFilter.objects.all()
     
@@ -237,16 +247,40 @@ def product_list(request):
     if len(products) <= 2:
         one_product = True
         context["one_product"] = one_product
+    
+    # carrito de compras
+    if request.method == "POST":
+
+        add_one = request.POST.get('addOne')
+
+        if add_one:
+            id_product = int(add_one.replace('addOne', ''))
+            cart_api.add_quantity(request, id_product, 1)
+        
+        print(cart_api.get_cart(request))
 
     return render(request, "product_list.html", context)
 
-class ProductDetailView(DetailView):
-    template_name = "product_detail.html"
-    queryset = Product.objects.all()
+def product_detail(request, id):
 
-    def get_object(self):
-        idToCreate = self.kwargs.get("id")
-        return get_object_or_404(Product, id=idToCreate)
+    product = Product.objects.get(id=id)
+
+    if request.method == "POST":
+
+        print(request.POST)
+
+        add_many = request.POST.get('addMany')
+        quantity = int(request.POST.get('quantity'))
+
+        if add_many:
+            id_product = int(add_many.replace('addMany', ''))
+            cart_api.add_quantity(request, id_product, quantity)
+        
+        print(cart_api.get_cart(request))
+
+    context = {"product": product}
+
+    return render(request, "product_detail.html", context)
 
 def product_update(request, id):
 
@@ -262,7 +296,6 @@ def product_update(request, id):
         # si el precio al actualizar cambia creamos una instancia de ProductHistory
         if product.price != product_price:
             product.history_set.create(price = product.price, date = datetime.date.today())
-            print(product.history_set.all())
 
         return redirect("/profile/")
 
@@ -270,20 +303,23 @@ def product_update(request, id):
 
     return render(request, "product_update.html", context)
 
-class ProductUpdateView(UpdateView):
-    template_name = "product_update.html"
-    form_class = ProductModelForm
-    queryset = Product.objects.all()
+def product_delete(request, id):
 
-    def get_object(self):
-        idToCreate = self.kwargs.get("id")
-        return get_object_or_404(Product, id=idToCreate)
+    product = Product.objects.get(id=id)
 
-    def form_valid(self, form):
-        return super().form_valid(form)
+    context = {"product": product}
 
-    def get_success_url(self):
-        return reverse('products:product-categories', kwargs={'id': self.object.pk})
+    if request.method == "POST":
+
+        if request.POST.get('delete'):
+
+            product.delete()
+            cart_api.delete_element(request, id)
+
+            return redirect("/profile/")
+            #return reverse("profile")
+
+    return render(request, "product_delete.html", context)
 
 class ProductDeleteView(DeleteView):
     template_name = "product_delete.html"

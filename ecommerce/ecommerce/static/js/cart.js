@@ -1,4 +1,4 @@
-function getCookie(name){
+/* function getCookie(name){
     var cookieArr = document.cookie.split(";");
 
     for(var i = 0; i < cookieArr.length; i++){
@@ -100,3 +100,4 @@ function removeCookieItem(id) {
 }
 
 console.log('Cart:',cart)
+ */

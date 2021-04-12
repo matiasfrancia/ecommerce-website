@@ -14,7 +14,6 @@
         <p class="page-title">{{p.title}}</p>
 
         <form method="post" action=".">{% csrf_token %}
-
                 <ul>
                     {% for categ in p.category_set.all %}
 

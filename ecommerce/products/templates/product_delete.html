@@ -15,8 +15,8 @@
         <p class="page-title">Eliminar producto</p>
 
         <form method="post">{% csrf_token %}
-            <p>Estás seguro de que quieres eliminar el producto: "{{ object }}"?</p>
-            <input type="submit" value="Borrar" onclick="removeCookieItem('{{object.id}}')">
+            <p>Estás seguro de que quieres eliminar el producto: "{{ product.title }}"?</p>
+            <input type="submit" name="delete" value="Borrar">
         </form>
         
 

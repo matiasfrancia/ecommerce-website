@@ -32,7 +32,7 @@ function display(data){
                         <p class="email">Email cliente: <br>${payment.payer_email}</p>
                         ${products_detail}
                         <p class="amount">Monto de compra: ${to_clp(payment.amount)}</p>
-                        <a class="refound" href="http://localhost:8000/refound/${payment.payment_id}">Reembolsar</a>
+                        <a class="refound" href="http://localhost:8000/payments/refound/${payment.payment_id}">Reembolsar</a>
                     </div>`
     }
     

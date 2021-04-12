@@ -11,15 +11,19 @@
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
     <link rel="stylesheet" href="{% static 'css/cart.css' %}">
 
-    <!-- Scripts -->
-
-    <script src="{% static 'js/cart.js' %}"></script>
-
 {% endblock %}
 
-{% block content %}
+{% block content %}  
         
     <p class="page-title">Carro de compras</p>
+
+    {% for item in items %}
+        {% if item.send_alert %}
+            <p class="toast">
+                {{item.alert_text | safe}}
+            </p>
+        {% endif %}
+    {% endfor %}
 
     <div class="content-wrapper">
 
@@ -44,13 +48,18 @@
                     </td>
                     <td class="table-name">{{item.product.title}}</td>
                     <td class="table-quantity">
-                        <input type="number" min='1' step='1' max='{{item.product.stock}}' name="num" class="num{{item.product.id}}" 
-                            onchange="updateCookieItem('{{item.product.id}}', {{item.product.stock}})" value="{{item.quantity}}">
+                        <form method="post" class="cart-form">{% csrf_token %}
+                            <input type="number" min='1' step='1' max='{{item.product.stock}}' name="quantity{{item.product.id}}" class="num{{item.product.id}}" 
+                                onchange="submit();" value="{{item.quantity}}">
+                        </form>
                     </td>
                     <td class="table-price">${{item.product.price | to_clp }}</td>
                     <td class="table-subtotal-price">${{item.subtotal | to_clp }}</td>
-                    <td class="table-delete"><button type="submit" name="removeItem" value="removeItem" 
-                        onclick="removeCookieItem('{{item.product.id}}')"><i class="far fa-trash-alt"></i></button></td>
+                    <td class="table-delete">
+                        <form method="post" class="cart-form">{% csrf_token %}
+                            <button type="submit" name="removeItem" value="removeItem{{item.product.id}}"><i class="far fa-trash-alt"></i></button>
+                        </form>
+                    </td>
                 </tr>
 
             {% endfor %}
@@ -72,7 +81,7 @@
             </table>
 
             {% if total_price > 0 %}
-                <a href="/cart/shipping/"><button type="submit" class="pay" name="pay" value="pay">Comprar</button></a>
+                <a href="/payments/shipping/"><button type="submit" class="pay" name="pay" value="pay">Comprar</button></a>
             {% endif %}
 
         </div>

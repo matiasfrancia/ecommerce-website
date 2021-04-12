@@ -51,7 +51,7 @@ class Movement(models.Model):
     mov_data = models.CharField(
         "Movimiento",
         max_length = 50,
-        choices = [('entrada', 'Entrada de producto'), ('salida', 'Salida de producto')],
+        choices = [('entrada', 'Entrada de producto'), ('salida', 'Salida de producto'), ('reembolso', 'Reembolso de producto')],
         null = True,
         blank = True
     )

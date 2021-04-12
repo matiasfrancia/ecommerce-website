@@ -1,7 +1,4 @@
 
-nav .fas {
-    color: var(--nav-buttons-color);
-}
 
 .filters {
     margin: 0.5rem 0 1.5rem 0;
@@ -94,6 +91,11 @@ input[type=button] {
     button[type=submit].background-red {
         width: calc(50% - 2px);
     }
+}
+
+form.cart-form {
+    all: revert;
+    display: inline-block;
 }
 
 /* ========================================================= Profile ========================================================= */
